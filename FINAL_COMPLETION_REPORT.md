@@ -4,22 +4,22 @@
 
 Running App是一个完整的全栈跑步应用系统，包含ThinkPHP后端、Android原生客户端（Kotlin）和iOS原生客户端（Swift）。经过多个阶段的开发和完善，项目已达到可投入生产使用的状态。
 
-**项目版本**：v1.3.0
+**项目版本**：v1.4.0
 **完成日期**：2025-11-15
 **总开发时间**：Phase 1-9 + Bug修复 + 功能完善
-**总代码量**：28,500+ 行
+**总代码量**：29,700+ 行
 
 ---
 
 ## 最终完成度
 
-### 总体完成度：98% ✅
+### 总体完成度：99% ✅
 
 | 模块 | 完成度 | 状态 | 备注 |
 |------|--------|------|------|
 | **后端 (ThinkPHP)** | 100% | ✅ 完成 | 74个API接口全部实现并测试 |
-| **Android (Kotlin)** | 98% | ✅ 完成 | 核心功能+完整UI+bug修复 |
-| **iOS (Swift)** | 98% | ✅ 完成 | 核心功能+完整UI+bug修复 |
+| **Android (Kotlin)** | 99% | ✅ 完成 | 核心功能+完整UI+完整ViewModel+工具类 |
+| **iOS (Swift)** | 99% | ✅ 完成 | 核心功能+完整UI+完整ViewModel+工具类 |
 
 ---
 
@@ -136,19 +136,19 @@ Repository：8个
 ViewModel：8个
 UI Screen：6个（Login, Register, Running, History, Social, Profile）
 Service：1个（LocationTrackingService）
-工具类：3个（LocationUtils, PreferenceManager, Result）
+工具类：5个（LocationUtils, PreferenceManager, Result, ValidationUtils, DateTimeUtils）
 Hilt模块：2个
-代码行数：8,500+
+代码行数：9,000+
 ```
 
 ### iOS (Swift)
 ```
-Model：4个
+Model：10个（User, RunningRecord, Post, Comment, Challenge等）
 Service：2个（NetworkService, LocationTrackingService）
-ViewModel：2个（LoginViewModel, RunningViewModel）
+ViewModel：5个（Login, Running, History, Social, Profile）
 View：8个（ContentView, RunningView, HistoryListView, SocialFeedView等）
-工具类：3个（LocationUtils, KeychainManager, DataFormatter）
-代码行数：3,400+
+工具类：4个（LocationUtils, KeychainManager, DataFormatter, ValidationUtils）
+代码行数：4,200+
 ```
 
 ---
@@ -196,12 +196,22 @@ View：8个（ContentView, RunningView, HistoryListView, SocialFeedView等）
 - ✅ 完善退出登录流程
 - ✅ 完善对话框交互
 
-### 功能完善阶段（最新）
+### 功能完善阶段
 - ✅ 实现验证码登录功能
 - ✅ 实现Token自动刷新逻辑
 - ✅ 添加数据初始化加载
 - ✅ 创建DataFormatter工具类
 - ✅ 创建API配置文档
+
+### ViewModel和工具类完善阶段（最新）
+- ✅ 新增iOS HistoryViewModel（历史记录管理）
+- ✅ 新增iOS SocialViewModel（社交功能管理）
+- ✅ 新增iOS ProfileViewModel（个人中心管理）
+- ✅ 新增Android ValidationUtils（表单验证工具）
+- ✅ 新增Android DateTimeUtils（日期时间工具）
+- ✅ 新增iOS ValidationUtils（验证工具）
+- ✅ 完善iOS Post模型（支持状态更新）
+- ✅ 添加Training, Challenge, RunningClub等模型
 
 ---
 
