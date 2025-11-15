@@ -97,8 +97,35 @@ class AuthInterceptor: RequestInterceptor {
             return
         }
 
-        // TODO: 实现Token刷新逻辑
-        completion(.doNotRetry)
+        // 实现Token刷新逻辑
+        guard let refreshToken = KeychainManager.shared.getRefreshToken() else {
+            // 没有refreshToken，直接失败
+            completion(.doNotRetryWithError(error))
+            return
+        }
+
+        // 调用刷新Token接口
+        Task {
+            do {
+                let response: RefreshTokenResponse = try await NetworkService.shared.request(
+                    "auth/refreshToken",
+                    method: .post,
+                    parameters: ["refresh_token": refreshToken]
+                )
+
+                // 保存新Token
+                KeychainManager.shared.saveAccessToken(response.token)
+                KeychainManager.shared.saveRefreshToken(response.refreshToken)
+
+                // 重试原请求
+                completion(.retry)
+            } catch {
+                // 刷新失败，需要重新登录
+                KeychainManager.shared.clearTokens()
+                NotificationCenter.default.post(name: NSNotification.Name("TokenRefreshFailed"), object: nil)
+                completion(.doNotRetryWithError(error))
+            }
+        }
     }
 }
 

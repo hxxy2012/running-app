@@ -31,6 +31,11 @@ class SocialViewModel @Inject constructor(
     private val _comments = MutableStateFlow<List<Comment>>(emptyList())
     val comments: StateFlow<List<Comment>> = _comments.asStateFlow()
 
+    init {
+        // 默认加载关注动态
+        loadFeed("following")
+    }
+
     /**
      * 获取动态流
      */

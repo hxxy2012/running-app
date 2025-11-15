@@ -177,7 +177,7 @@ fun LoginScreen(
                     if (usePassword) {
                         viewModel.login(phone, password)
                     } else {
-                        // TODO: 验证码登录
+                        viewModel.loginWithCode(phone, verificationCode)
                     }
                 },
                 modifier = Modifier
