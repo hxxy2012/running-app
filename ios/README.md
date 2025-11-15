@@ -4,6 +4,23 @@
 
 Running App iOS客户端，使用Swift语言，采用MVVM架构，SwiftUI构建现代化UI。
 
+## 实现状态
+
+### ✅ 已完成
+- **数据模型**: User、RunningRecord、TrackPoint、Post等完整模型
+- **网络层**: NetworkService基于Alamofire的完整实现
+- **定位服务**: LocationTrackingService GPS跟踪服务
+- **安全存储**: KeychainManager token安全管理
+- **ViewModels**: LoginViewModel、RunningViewModel实现
+- **API封装**: 统一的ApiResponse和错误处理
+
+### 🚧 待完善
+- **UI界面**: SwiftUI具体页面实现
+- **CoreData**: 本地数据持久化
+- **HealthKit集成**: 健康数据读写
+- **第三方登录**: Apple ID、微信、QQ登录
+- **单元测试**: ViewModel和Service测试用例
+
 ## 技术栈
 
 - **语言**: Swift 5.9+
@@ -21,63 +38,34 @@ Running App iOS客户端，使用Swift语言，采用MVVM架构，SwiftUI构建�
 
 ```
 RunningApp/
-├── App/
-│   ├── RunningApp.swift          # App入口
-│   └── SceneDelegate.swift
-├── Data/                          # 数据层
-│   ├── Local/                     # 本地数据
-│   │   ├── CoreData/
-│   │   │   ├── RunningApp.xcdatamodeld
-│   │   │   └── CoreDataManager.swift
-│   │   └── UserDefaults/
-│   │       └── AppSettings.swift
-│   ├── Remote/                    # 远程数据
-│   │   ├── API/
-│   │   │   ├── AuthAPI.swift
-│   │   │   ├── RunningAPI.swift
-│   │   │   └── SocialAPI.swift
-│   │   ├── DTO/                   # 数据传输对象
-│   │   └── Network/
-│   │       ├── NetworkManager.swift
-│   │       └── APIService.swift
-│   └── Repository/                # 数据仓库
-├── Domain/                        # 业务逻辑层
-│   ├── Model/                     # 领域模型
-│   │   ├── User.swift
-│   │   ├── RunningRecord.swift
-│   │   └── TrackPoint.swift
-│   └── UseCase/                   # 用例
-├── Presentation/                  # 展示层
-│   ├── Common/                    # 通用组件
-│   │   ├── Views/
-│   │   └── Extensions/
+├── Models/                        # 数据模型 ✅
+│   ├── User.swift                 # 用户模型 ✅
+│   ├── RunningRecord.swift        # 跑步记录模型 ✅
+│   ├── Post.swift                 # 动态帖子模型 ✅
+│   ├── ApiResponse.swift          # API响应模型 ✅
+│   └── TrackPoint.swift           # 轨迹点模型 ✅
+├── Services/                      # 服务层 ✅
+│   ├── NetworkService.swift       # 网络服务 ✅
+│   ├── LocationTrackingService.swift  # GPS跟踪服务 ✅
+│   └── KeychainManager.swift      # 钥匙串管理 ✅
+├── ViewModels/                    # 视图模型 ✅
+│   ├── LoginViewModel.swift       # 登录ViewModel ✅
+│   └── RunningViewModel.swift     # 跑步ViewModel ✅
+├── Views/                         # 视图层 🚧
 │   ├── Auth/                      # 认证模块
 │   │   ├── LoginView.swift
-│   │   ├── RegisterView.swift
-│   │   └── LoginViewModel.swift
+│   │   └── RegisterView.swift
 │   ├── Main/
-│   │   ├── MainTabView.swift
-│   │   └── MainViewModel.swift
+│   │   └── MainTabView.swift
 │   ├── Running/                   # 跑步模块
-│   │   ├── RunningView.swift
-│   │   ├── RunningViewModel.swift
-│   │   └── Components/
-│   ├── Record/                    # 记录模块
+│   │   └── RunningView.swift
+│   ├── History/                   # 历史记录
 │   ├── Social/                    # 社交模块
-│   ├── Profile/                   # 个人中心
-│   └── Statistics/                # 数据统计
-├── Service/                       # 服务
-│   ├── LocationManager.swift      # 定位管理
-│   ├── TrackingService.swift      # 轨迹服务
-│   ├── VoiceService.swift         # 语音播报
-│   └── HealthKitManager.swift     # 健康数据
-├── Utils/                         # 工具类
-│   ├── LocationUtil.swift
-│   ├── SpeedCalculator.swift
-│   └── Extensions/
+│   └── Profile/                   # 个人中心
+├── Utils/                         # 工具类 ✅
+│   └── LocationUtils.swift        # 位置工具 ✅
 └── Resources/
     ├── Assets.xcassets
-    ├── Localizable.strings
     └── Info.plist
 ```
 
