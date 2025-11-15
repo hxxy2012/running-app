@@ -1,0 +1,47 @@
+{
+    "name": "running-app/backend",
+    "description": "Running App Backend API",
+    "type": "project",
+    "keywords": [
+        "running",
+        "fitness",
+        "thinkphp",
+        "api"
+    ],
+    "homepage": "https://www.running-app.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Running App Team",
+            "email": "dev@running-app.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "topthink/framework": "^6.1",
+        "topthink/think-orm": "^2.0",
+        "topthink/think-view": "^1.0",
+        "firebase/php-jwt": "^6.3",
+        "guzzlehttp/guzzle": "^7.5",
+        "phpmailer/phpmailer": "^6.8"
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "app\\": "app/"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@php think service:discover",
+            "@php think vendor:publish"
+        ]
+    }
+}

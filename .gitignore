@@ -1,0 +1,47 @@
+# ========== 通用 ==========
+.DS_Store
+.idea/
+*.log
+*.swp
+*.swo
+*~
+
+# ========== 后台 (ThinkPHP) ==========
+backend/.env
+backend/runtime/
+backend/vendor/
+backend/composer.lock
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+
+# ========== Android ==========
+android/.gradle/
+android/.idea/
+android/local.properties
+android/build/
+android/app/build/
+android/*.iml
+android/.DS_Store
+android/captures/
+android/.externalNativeBuild
+android/.cxx
+android/app/release/
+android/app/debug/
+android/*.apk
+android/*.aab
+
+# ========== iOS ==========
+ios/Pods/
+ios/*.xcworkspace
+ios/*.xcuserdata
+ios/*.xcuserdatad
+ios/DerivedData/
+ios/Build/
+ios/.DS_Store
+ios/*.ipa
+ios/*.dSYM.zip
+ios/*.dSYM
+ios/Podfile.lock
+
+# ========== 文档 ==========
+docs/.vscode/
