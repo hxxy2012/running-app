@@ -21,7 +21,7 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             // 首页 - 跑步
-            HomeView()
+            RunningView()
                 .tabItem {
                     Image(systemName: "figure.run")
                     Text("跑步")
@@ -29,7 +29,7 @@ struct MainTabView: View {
                 .tag(0)
 
             // 历史记录
-            HistoryView()
+            HistoryListView()
                 .tabItem {
                     Image(systemName: "list.bullet")
                     Text("记录")
@@ -37,7 +37,7 @@ struct MainTabView: View {
                 .tag(1)
 
             // 社交动态
-            SocialView()
+            SocialFeedView()
                 .tabItem {
                     Image(systemName: "person.2")
                     Text("动态")
@@ -45,7 +45,7 @@ struct MainTabView: View {
                 .tag(2)
 
             // 个人中心
-            ProfileView()
+            ProfileTabView()
                 .tabItem {
                     Image(systemName: "person.circle")
                     Text("我的")
@@ -111,110 +111,6 @@ struct LoginView: View {
     }
 }
 
-// MARK: - 首页
-struct HomeView: View {
-    @StateObject private var viewModel = RunningViewModel()
-
-    var body: some View {
-        NavigationView {
-            VStack {
-                Text("跑步界面")
-                    .font(.title)
-                    .padding()
-
-                // TODO: 实现跑步界面UI
-                Text("距离: \(String(format: "%.2f", viewModel.runningData.distance / 1000)) km")
-                Text("时长: \(LocationUtils.formatDuration(viewModel.runningData.duration))")
-                Text("配速: \(LocationUtils.formatPace(viewModel.runningData.avgPace))")
-
-                Spacer()
-
-                Button(action: {
-                    switch viewModel.runningState {
-                    case .stopped:
-                        viewModel.startRunning()
-                    case .running:
-                        viewModel.pauseRunning()
-                    case .paused:
-                        viewModel.resumeRunning()
-                    }
-                }) {
-                    Text(buttonTitle(for: viewModel.runningState))
-                        .fontWeight(.semibold)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 50)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(10)
-                }
-                .padding(.horizontal, 40)
-            }
-            .navigationTitle("跑步")
-        }
-    }
-
-    private func buttonTitle(for state: RunningViewModel.RunningState) -> String {
-        switch state {
-        case .stopped:
-            return "开始跑步"
-        case .running:
-            return "暂停"
-        case .paused:
-            return "继续"
-        }
-    }
-}
-
-// MARK: - 历史记录
-struct HistoryView: View {
-    var body: some View {
-        NavigationView {
-            List {
-                Text("历史记录列表")
-            }
-            .navigationTitle("记录")
-        }
-    }
-}
-
-// MARK: - 社交动态
-struct SocialView: View {
-    var body: some View {
-        NavigationView {
-            List {
-                Text("社交动态列表")
-            }
-            .navigationTitle("动态")
-        }
-    }
-}
-
-// MARK: - 个人中心
-struct ProfileView: View {
-    var body: some View {
-        NavigationView {
-            List {
-                Section(header: Text("个人信息")) {
-                    Text("昵称")
-                    Text("头像")
-                }
-
-                Section(header: Text("设置")) {
-                    Text("账号设置")
-                    Text("隐私设置")
-                }
-
-                Section {
-                    Button("退出登录") {
-                        // TODO: 实现退出登录
-                    }
-                    .foregroundColor(.red)
-                }
-            }
-            .navigationTitle("我的")
-        }
-    }
-}
 
 // MARK: - Preview
 struct ContentView_Previews: PreviewProvider {
