@@ -204,6 +204,15 @@ class RunningViewModel @Inject constructor(
     }
 
     /**
+     * 关闭完成对话框
+     */
+    fun dismissFinishDialog() {
+        _uiState.value = UiState.Idle
+        _runningData.value = RunningData()
+        currentRecordId = 0
+    }
+
+    /**
      * 计算累计爬升
      */
     private fun calculateElevationGain(points: List<TrackPointEntity>): Int {

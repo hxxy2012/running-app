@@ -1,4 +1,5 @@
 import SwiftUI
+import Combine
 
 // MARK: - 主界面
 struct ContentView: View {
@@ -7,6 +8,9 @@ struct ContentView: View {
     var body: some View {
         if loginViewModel.isLoggedIn {
             MainTabView()
+                .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("UserDidLogout"))) { _ in
+                    loginViewModel.isLoggedIn = false
+                }
         } else {
             LoginView()
                 .environmentObject(loginViewModel)

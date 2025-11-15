@@ -194,7 +194,7 @@ fun RegisterScreen(
             // 注册按钮
             Button(
                 onClick = {
-                    // TODO: 调用注册接口
+                    viewModel.register(phone, verificationCode, password)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

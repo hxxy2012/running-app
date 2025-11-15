@@ -264,7 +264,7 @@ fun RunningScreen(
     if (uiState is RunningViewModel.UiState.Finished) {
         val record = (uiState as RunningViewModel.UiState.Finished).record
         AlertDialog(
-            onDismissRequest = { /* 不允许点击外部关闭 */ },
+            onDismissRequest = { viewModel.dismissFinishDialog() },
             title = { Text("跑步完成！") },
             text = {
                 Column {
@@ -275,12 +275,15 @@ fun RunningScreen(
                 }
             },
             confirmButton = {
-                TextButton(onClick = { /* 查看详情 */ }) {
+                TextButton(onClick = {
+                    viewModel.dismissFinishDialog()
+                    // TODO: 导航到记录详情页面
+                }) {
                     Text("查看详情")
                 }
             },
             dismissButton = {
-                TextButton(onClick = { /* 关闭 */ }) {
+                TextButton(onClick = { viewModel.dismissFinishDialog() }) {
                     Text("关闭")
                 }
             }

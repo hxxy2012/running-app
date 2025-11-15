@@ -245,7 +245,11 @@ struct ProfileTabView: View {
         .alert("确认退出登录？", isPresented: $showingLogoutAlert) {
             Button("取消", role: .cancel) {}
             Button("退出", role: .destructive) {
-                // 退出登录逻辑
+                // 清除Token和用户数据
+                KeychainManager.shared.clearTokens()
+                UserDefaults.standard.removeObject(forKey: "userId")
+                // 触发ContentView重新检查登录状态
+                NotificationCenter.default.post(name: NSNotification.Name("UserDidLogout"), object: nil)
             }
         }
     }

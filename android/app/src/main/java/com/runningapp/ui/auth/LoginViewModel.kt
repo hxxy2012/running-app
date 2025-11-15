@@ -66,7 +66,38 @@ class LoginViewModel @Inject constructor(
      * 验证码登录
      */
     fun loginWithCode(phone: String, code: String) {
-        // TODO: 实现验证码登录
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            when (val result = authRepository.loginWithCode(phone, code)) {
+                is Result.Success -> {
+                    saveLoginInfo(result.data)
+                    _uiState.value = UiState.Success(result.data)
+                }
+                is Result.Error -> {
+                    _uiState.value = UiState.Error(result.exception.message ?: "登录失败")
+                }
+                else -> {}
+            }
+        }
+    }
+
+    /**
+     * 注册
+     */
+    fun register(phone: String, code: String, password: String) {
+        viewModelScope.launch {
+            _uiState.value = UiState.Loading
+            when (val result = authRepository.register(phone, code, password)) {
+                is Result.Success -> {
+                    saveLoginInfo(result.data)
+                    _uiState.value = UiState.Success(result.data)
+                }
+                is Result.Error -> {
+                    _uiState.value = UiState.Error(result.exception.message ?: "注册失败")
+                }
+                else -> {}
+            }
+        }
     }
 
     /**
