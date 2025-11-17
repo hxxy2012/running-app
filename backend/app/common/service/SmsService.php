@@ -19,10 +19,21 @@ class SmsService
         // 从配置文件读取
         $config = config('sms');
         $this->provider = $config['provider'] ?? 'aliyun';
-        $this->accessKeyId = $config['access_key_id'] ?? '';
-        $this->accessKeySecret = $config['access_key_secret'] ?? '';
-        $this->signName = $config['sign_name'] ?? '';
-        $this->templateCode = $config['template_code'] ?? '';
+
+        // 根据不同的服务商读取对应的配置
+        $providerConfig = $config[$this->provider] ?? [];
+
+        if ($this->provider === 'aliyun') {
+            $this->accessKeyId = $providerConfig['access_key_id'] ?? '';
+            $this->accessKeySecret = $providerConfig['access_key_secret'] ?? '';
+            $this->signName = $providerConfig['sign_name'] ?? '';
+            $this->templateCode = $providerConfig['template_code'] ?? '';
+        } elseif ($this->provider === 'tencent') {
+            $this->accessKeyId = $providerConfig['secret_id'] ?? '';
+            $this->accessKeySecret = $providerConfig['secret_key'] ?? '';
+            $this->signName = $providerConfig['sign_name'] ?? '';
+            $this->templateCode = $providerConfig['template_id'] ?? '';
+        }
     }
 
     /**
@@ -137,11 +148,25 @@ class SmsService
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true); // 启用SSL验证（安全）
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 10); // 10秒超时
         $response = curl_exec($ch);
+
+        // 检查curl错误
+        if ($response === false) {
+            $error = curl_error($ch);
+            curl_close($ch);
+            return ['code' => 500, 'message' => 'HTTP请求失败: ' . $error];
+        }
+
         curl_close($ch);
 
         $result = json_decode($response, true);
+
+        if ($result === null) {
+            return ['code' => 500, 'message' => '响应解析失败'];
+        }
 
         if (isset($result['Code']) && $result['Code'] === 'OK') {
             return ['code' => 200, 'message' => '发送成功'];

@@ -172,6 +172,7 @@ class CrashHandler @Inject constructor(
 
     /**
      * 上传崩溃报告
+     * 注意：实际使用时需要配置正确的API地址
      */
     private fun uploadCrashReport(crashInfo: CrashInfo) {
         CoroutineScope(Dispatchers.IO).launch {
@@ -180,7 +181,7 @@ class CrashHandler @Inject constructor(
                 val json = """
                     {
                         "platform": "android",
-                        "app_version": "${deviceHelper.appVersion}",
+                        "app_version": "${crashInfo.appVersion}",
                         "os_version": "${Build.VERSION.RELEASE}",
                         "device_model": "${Build.MODEL}",
                         "crash_time": "${SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date(crashInfo.timestamp))}",
@@ -188,24 +189,30 @@ class CrashHandler @Inject constructor(
                     }
                 """.trimIndent()
 
-                // 使用 OkHttp 上传（需要从 AppModule 获取 baseUrl，这里使用硬编码）
-                val client = okhttp3.OkHttpClient()
-                val requestBody = okhttp3.RequestBody.create(
-                    okhttp3.MediaType.parse("application/json; charset=utf-8"),
-                    json
-                )
+                // 使用OkHttp上传
+                // 注意：这里使用硬编码URL，实际使用时应该从配置中读取或注入OkHttpClient
+                val client = okhttp3.OkHttpClient.Builder()
+                    .connectTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+                    .writeTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+                    .readTimeout(10, java.util.concurrent.TimeUnit.SECONDS)
+                    .build()
+
+                val mediaType = okhttp3.MediaType.get("application/json; charset=utf-8")
+                val requestBody = okhttp3.RequestBody.create(mediaType, json)
+
                 val request = okhttp3.Request.Builder()
-                    .url("YOUR_API_BASE_URL/crash/upload")  // 需要替换为实际的API地址
+                    .url("YOUR_API_BASE_URL/crash/upload")  // TODO: 替换为实际的API地址
                     .post(requestBody)
                     .build()
 
                 val response = client.newCall(request).execute()
-                if (response.isSuccessful) {
-                    Logger.d("CrashHandler", "Crash report uploaded successfully")
-                } else {
-                    Logger.e("CrashHandler", "Failed to upload: ${response.code()}")
+                response.use {
+                    if (it.isSuccessful) {
+                        Logger.d("CrashHandler", "Crash report uploaded successfully")
+                    } else {
+                        Logger.e("CrashHandler", "Failed to upload: ${it.code()}")
+                    }
                 }
-                response.close()
             } catch (e: Exception) {
                 Logger.e("CrashHandler", "Failed to upload crash report", e)
                 // 上传失败不影响崩溃处理流程

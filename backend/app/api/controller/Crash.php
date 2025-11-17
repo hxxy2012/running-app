@@ -28,6 +28,11 @@ class Crash extends ApiBase
             return $this->error('参数不完整');
         }
 
+        // 限制日志内容大小（最大1MB）
+        if (strlen($logContent) > 1024 * 1024) {
+            return $this->error('日志内容超过1MB限制');
+        }
+
         try {
             // 创建日志目录
             $logDir = runtime_path() . 'crash_logs/' . $platform . '/' . date('Y-m-d');
@@ -52,7 +57,10 @@ class Crash extends ApiBase
             $content .= $logContent;
 
             // 写入文件
-            file_put_contents($filePath, $content);
+            $result = file_put_contents($filePath, $content);
+            if ($result === false) {
+                throw new \Exception('文件写入失败');
+            }
 
             // 记录到数据库（可选）
             // 可以创建一个crash_log表来存储崩溃记录的元信息
@@ -98,14 +106,22 @@ class Crash extends ApiBase
                 return $this->error('文件大小不能超过10MB');
             }
 
-            // 保存文件
-            $savePath = 'crash_logs/' . $platform . '/' . date('Y-m-d');
-            $fileName = date('His') . '_' . ($this->userId ?? 'guest') . '_' . uniqid() . '.' . $ext;
+            // 保存文件到runtime目录
+            $saveDir = runtime_path() . 'crash_logs/' . $platform . '/' . date('Y-m-d');
+            if (!is_dir($saveDir)) {
+                mkdir($saveDir, 0755, true);
+            }
 
-            $path = $file->move($savePath, $fileName);
+            $fileName = date('His') . '_' . ($this->userId ?? 'guest') . '_' . uniqid() . '.' . $ext;
+            $savePath = $saveDir . '/' . $fileName;
+
+            // 移动上传的文件
+            if (!$file->move($saveDir, $fileName)) {
+                throw new \Exception('文件保存失败');
+            }
 
             return $this->success([
-                'file_path' => $savePath . '/' . $fileName,
+                'file_path' => 'crash_logs/' . $platform . '/' . date('Y-m-d') . '/' . $fileName,
                 'file_size' => $file->getSize()
             ], '文件上传成功');
 
@@ -145,6 +161,12 @@ class Crash extends ApiBase
                     continue;
                 }
 
+                // 限制单条日志大小
+                if (strlen($logContent) > 1024 * 1024) {
+                    $failedCount++;
+                    continue;
+                }
+
                 // 创建日志目录
                 $logDir = runtime_path() . 'crash_logs/' . $platform . '/' . date('Y-m-d');
                 if (!is_dir($logDir)) {
@@ -156,7 +178,12 @@ class Crash extends ApiBase
                 $filePath = $logDir . '/' . $fileName;
 
                 // 写入文件
-                file_put_contents($filePath, $logContent);
+                $result = file_put_contents($filePath, $logContent);
+                if ($result === false) {
+                    $failedCount++;
+                    continue;
+                }
+
                 $successCount++;
 
                 $results[] = [
