@@ -142,55 +142,165 @@ cd running-app
 ```
 
 #### 2. 后端部署
+
+##### 快速开始（开发环境）
 ```bash
 cd backend
+
+# 安装依赖
 composer install
+
+# 配置数据库
 cp config/database_example.php config/database.php
-# 编辑database.php配置数据库连接
-mysql -u root -p < database/running_app.sql
+# 编辑 config/database.php 配置数据库连接
+
+# 导入数据库
+mysql -u root -p running_app < database/running_app.sql
+
+# 【推荐】应用数据库优化（可选但强烈推荐）
+# 包含外键约束、性能索引、安全加固等
+mysql -u root -p running_app < database/optimization_v1.5.9.sql
+
+# 配置环境变量（.env文件）
+# 重要：配置JWT密钥、短信服务等
+cp .env.example .env
+# 编辑 .env 文件，至少配置以下项：
+# - jwt.secret（随机字符串，至少32位）
+# - database.*（数据库连接信息）
+# - sms.*（短信服务商配置，可选）
+
+# 启动开发服务器
 php think run
 ```
+
+##### 生产部署
+
+**推荐使用Docker部署** - 参考 [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md)
+
+```bash
+docker-compose up -d
+```
+
+**传统部署方式** - 详见 [DEPLOYMENT.md](DEPLOYMENT.md)
+
+**安全检查清单**:
+- ✅ 修改默认JWT密钥（必须）
+- ✅ 应用数据库优化脚本（推荐）
+- ✅ 配置SSL/HTTPS（生产必需）
+- ✅ 设置防火墙规则
+- ✅ 配置文件上传限制
+- 详见 [backend/database/DB_OPTIMIZATION_v1.5.9.md](backend/database/DB_OPTIMIZATION_v1.5.9.md)
 
 #### 3. Android配置
 ```bash
 cd android
-# 编辑 android/app/src/main/java/com/runningapp/di/AppModule.kt
-# 修改第18行的API地址
+
+# 配置API地址
+# 编辑 app/src/main/java/com/runningapp/di/AppModule.kt
+# 修改第18行的 BASE_URL 为你的后端地址
+
+# 编译Debug版本
 ./gradlew assembleDebug
+
+# 或直接在Android Studio中打开项目
 ```
+
+**注意**: Android需要Google Play Services（定位功能）
 
 #### 4. iOS配置
 ```bash
 cd ios
-# 编辑 ios/RunningApp/Services/NetworkService.swift
-# 修改第8行的API地址
+
+# 安装依赖
 pod install
+
+# 配置API地址
+# 编辑 RunningApp/Services/NetworkService.swift
+# 修改第8行的 baseURL 为你的后端地址
+
+# 在Xcode中打开工作空间
 open RunningApp.xcworkspace
 ```
 
-详细配置说明请参考 [API_CONFIG.md](API_CONFIG.md)
+**注意**: iOS需要配置位置权限（Info.plist）
+
+---
+
+### 📖 详细文档
+
+| 场景 | 推荐文档 |
+|------|---------|
+| **5分钟快速体验** | [QUICK_START.md](QUICK_START.md) ⭐ |
+| **Docker部署（推荐）** | [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md) ⭐ |
+| **生产环境部署** | [DEPLOYMENT.md](DEPLOYMENT.md) |
+| **API地址配置** | [API_CONFIG.md](API_CONFIG.md) |
+| **数据库优化** | [backend/database/DB_OPTIMIZATION_v1.5.9.md](backend/database/DB_OPTIMIZATION_v1.5.9.md) |
+| **第三方服务集成** | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) |
+| **Bug修复记录** | [BUG_FIXES_v1.5.9_PATCH.md](BUG_FIXES_v1.5.9_PATCH.md) |
+
+### ⚠️ 常见问题
+
+**Q: 数据库连接失败？**
+- 检查 `config/database.php` 配置是否正确
+- 确认MySQL服务已启动
+- 检查数据库用户权限
+
+**Q: API请求失败（404/500）？**
+- 检查后端服务是否启动
+- 确认客户端配置的API地址正确
+- 查看后端日志：`runtime/log/`
+
+**Q: JWT令牌验证失败？**
+- 确保配置了jwt.secret（不能使用默认值）
+- 检查客户端和服务端时间是否同步
+
+**Q: 数据库性能问题？**
+- 应用优化脚本：`database/optimization_v1.5.9.sql`
+- 参考优化文档：`backend/database/DB_OPTIMIZATION_v1.5.9.md`
+
+更多问题请查看 [ERROR_HANDLING.md](ERROR_HANDLING.md)
 
 ---
 
 ## 📚 文档
 
+### 核心文档
+
 | 文档 | 说明 |
 |------|------|
 | [QUICK_START.md](QUICK_START.md) | ⭐ 快速开始指南（5分钟） |
+| [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md) | ⭐ Docker部署指南（推荐） |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | 传统部署指南 |
 | [API_CONFIG.md](API_CONFIG.md) | API配置指南 |
-| [ERROR_HANDLING.md](ERROR_HANDLING.md) | 错误处理文档 |
+| [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | ⭐ 第三方服务集成指南 |
+
+### 技术文档
+
+| 文档 | 说明 |
+|------|------|
 | [API.md](API.md) | API接口文档（74个接口） |
 | [DATABASE.md](DATABASE.md) | 数据库设计文档（30个表） |
-| [DEPLOYMENT.md](DEPLOYMENT.md) | 部署指南 |
-| [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md) | ⭐ Docker部署指南（推荐） |
-| [BUG_FIXES_REPORT.md](BUG_FIXES_REPORT.md) | Bug修复报告 |
+| [backend/database/DB_OPTIMIZATION_v1.5.9.md](backend/database/DB_OPTIMIZATION_v1.5.9.md) | 🔴 数据库优化报告（重要） |
+| [ERROR_HANDLING.md](ERROR_HANDLING.md) | 错误处理文档 |
+
+### 修复与更新
+
+| 文档 | 说明 |
+|------|------|
 | [BUG_FIXES_v1.5.9_PATCH.md](BUG_FIXES_v1.5.9_PATCH.md) | 🔴 v1.5.9补丁修复报告（重要） |
-| [PHASE_8_9_REPORT.md](PHASE_8_9_REPORT.md) | Phase 8-9实现报告 |
-| [FINAL_COMPLETION_REPORT.md](FINAL_COMPLETION_REPORT.md) | 最终完成报告 |
-| [COMPLETION_REPORT_v1.5.8.md](COMPLETION_REPORT_v1.5.8.md) | v1.5.8完成报告 |
-| [COMPLETION_REPORT_v1.5.9.md](COMPLETION_REPORT_v1.5.9.md) | ⭐ v1.5.9完成报告（最新） |
-| [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | ⭐ 第三方服务集成指南 |
 | [CHANGELOG.md](CHANGELOG.md) | 版本更新日志 |
+| [BUG_FIXES_REPORT.md](BUG_FIXES_REPORT.md) | Bug修复报告 |
+
+### 项目报告
+
+| 文档 | 说明 |
+|------|------|
+| [FINAL_PROJECT_SUMMARY_v1.5.9.md](FINAL_PROJECT_SUMMARY_v1.5.9.md) | ⭐⭐⭐ 最终项目总结（必读） |
+| [COMPLETION_REPORT_v1.5.9.md](COMPLETION_REPORT_v1.5.9.md) | ⭐ v1.5.9完成报告（最新） |
+| [TEST_SCRIPTS.md](TEST_SCRIPTS.md) | ⭐ 测试脚本文档 |
+| [COMPLETION_REPORT_v1.5.8.md](COMPLETION_REPORT_v1.5.8.md) | v1.5.8完成报告 |
+| [FINAL_COMPLETION_REPORT.md](FINAL_COMPLETION_REPORT.md) | 最终完成报告 |
+| [PHASE_8_9_REPORT.md](PHASE_8_9_REPORT.md) | Phase 8-9实现报告 |
 | [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) | 项目总结 |
 
 ---
