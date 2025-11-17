@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.0-blue)
+![Version](https://img.shields.io/badge/version-1.5.1-blue)
 ![Backend](https://img.shields.io/badge/backend-100%25-brightgreen)
 ![Android](https://img.shields.io/badge/android-100%25-brightgreen)
 ![iOS](https://img.shields.io/badge/iOS-100%25-brightgreen)
