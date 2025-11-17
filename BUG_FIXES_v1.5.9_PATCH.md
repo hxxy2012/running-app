@@ -2,7 +2,7 @@
 
 **修复日期**: 2025-11-17
 **版本**: v1.5.9 Patch
-**修复范围**: 后端 + Android
+**修复范围**: 后端 + Android + iOS
 
 ---
 
@@ -14,8 +14,10 @@
 2. HTTP请求的安全性问题
 3. 文件操作的错误处理
 4. Android代码的API使用问题
+5. iOS代码的超时配置问题
 
 **修复级别**: 🔴 重要
+**修复总数**: 12个问题（5个文件）
 
 ---
 
@@ -331,6 +333,111 @@ private fun uploadCrashReport(crashInfo: CrashInfo) {
 
 ---
 
+### 5. RealAuthService.php - 配置读取错误
+
+**文件**: `backend/app/common/service/RealAuthService.php`
+
+**问题描述**:
+与SmsService相同的配置读取问题。构造函数无法正确读取分层配置结构。
+
+**影响**:
+- 🟡 **严重性**: 中
+- 实名认证服务配置错误
+- 不同服务商配置混乱
+
+**修复前代码**:
+```php
+public function __construct()
+{
+    $config = config('realauth');
+    $this->provider = $config['provider'] ?? 'aliyun';
+    $this->accessKeyId = $config['access_key_id'] ?? '';  // 错误
+    $this->accessKeySecret = $config['access_key_secret'] ?? '';
+}
+```
+
+**修复后代码**:
+```php
+public function __construct()
+{
+    $config = config('realauth');
+    $this->provider = $config['provider'] ?? 'aliyun';
+
+    // 根据不同的服务商读取对应的配置
+    $providerConfig = $config[$this->provider] ?? [];
+
+    if ($this->provider === 'aliyun') {
+        $this->accessKeyId = $providerConfig['access_key_id'] ?? '';
+        $this->accessKeySecret = $providerConfig['access_key_secret'] ?? '';
+    } elseif ($this->provider === 'tencent') {
+        $this->accessKeyId = $providerConfig['secret_id'] ?? '';
+        $this->accessKeySecret = $providerConfig['secret_key'] ?? '';
+    }
+}
+```
+
+**修复效果**:
+- ✅ 正确读取不同服务商配置
+- ✅ 配置隔离互不影响
+
+---
+
+### 6. iOS CrashHandler.swift - 超时配置和变量使用
+
+**文件**: `ios/RunningApp/Utils/CrashHandler.swift`
+
+**问题描述**:
+1. 没有设置URLRequest和URLSession的超时
+2. 使用了DeviceHelper.shared而不是crashInfo中的数据
+
+**影响**:
+- 🟡 **严重性**: 中
+- 网络请求可能无限挂起
+- 上传的版本信息可能不准确
+
+**修复前代码**:
+```swift
+let parameters: [String: Any] = [
+    "platform": "ios",
+    "app_version": DeviceHelper.shared.appVersion,  // 不准确
+    // ...
+]
+
+var request = URLRequest(url: url)
+request.httpMethod = "POST"
+// 没有超时设置
+
+let (data, response) = try await URLSession.shared.data(for: request)
+```
+
+**修复后代码**:
+```swift
+let parameters: [String: Any] = [
+    "platform": "ios",
+    "app_version": crashInfo.appVersion,  // 使用crashInfo中的数据
+    // ...
+]
+
+var request = URLRequest(url: url)
+request.httpMethod = "POST"
+request.timeoutInterval = 10  // 10秒超时
+
+// 配置URLSession
+let config = URLSessionConfiguration.default
+config.timeoutIntervalForRequest = 10
+config.timeoutIntervalForResource = 30
+let session = URLSession(configuration: config)
+
+let (data, response) = try await session.data(for: request)
+```
+
+**修复效果**:
+- ✅ 防止请求挂起
+- ✅ 使用准确的版本信息
+- ✅ 完善的超时配置
+
+---
+
 ## 📊 修复统计
 
 ### 按文件统计
@@ -338,16 +445,18 @@ private fun uploadCrashReport(crashInfo: CrashInfo) {
 | 文件 | 问题数 | 修复数 | 状态 |
 |------|--------|--------|------|
 | SmsService.php | 2 | 2 | ✅ |
+| RealAuthService.php | 1 | 1 | ✅ |
 | Crash.php | 3 | 3 | ✅ |
 | CrashHandler.kt | 4 | 4 | ✅ |
-| **总计** | **9** | **9** | **✅** |
+| CrashHandler.swift | 2 | 2 | ✅ |
+| **总计** | **12** | **12** | **✅** |
 
 ### 按严重性统计
 
 | 严重性 | 数量 | 占比 |
 |--------|------|------|
-| 🔴 高 | 3 | 33% |
-| 🟡 中 | 6 | 67% |
+| 🔴 高 | 3 | 25% |
+| 🟡 中 | 9 | 75% |
 | 🟢 低 | 0 | 0% |
 
 ### 按类型统计
@@ -355,8 +464,9 @@ private fun uploadCrashReport(crashInfo: CrashInfo) {
 | 类型 | 数量 |
 |------|------|
 | 安全问题 | 2 |
+| 配置错误 | 2 |
 | 功能bug | 3 |
-| 代码质量 | 4 |
+| 代码质量 | 5 |
 
 ---
 
@@ -520,10 +630,10 @@ class CrashHandler @Inject constructor(
 
 ## 🎯 总结
 
-本次修复解决了 **9个** 代码问题，其中包括 **3个高严重性** 问题。主要改进了：
+本次修复解决了 **12个** 代码问题（跨5个文件），其中包括 **3个高严重性** 问题。主要改进了：
 
-1. ✅ **安全性提升** - 启用SSL验证，防止中间人攻击
-2. ✅ **稳定性提升** - 完善错误处理，防止DOS攻击
+1. ✅ **安全性提升** - 启用SSL验证，防止中间人攻击和DOS攻击
+2. ✅ **稳定性提升** - 完善错误处理，添加超时保护，防止静默失败
 3. ✅ **正确性提升** - 修复配置读取和变量引用错误
 4. ✅ **代码质量提升** - 使用现代API，改进资源管理
 
@@ -534,4 +644,11 @@ class CrashHandler @Inject constructor(
 **修复人员**: Claude Code Assistant
 **审查状态**: ✅ 已完成
 **部署建议**: 🔴 建议立即部署
+
+**影响的文件**:
+- `backend/app/common/service/SmsService.php`
+- `backend/app/common/service/RealAuthService.php`
+- `backend/app/api/controller/Crash.php`
+- `android/app/src/main/java/com/runningapp/utils/CrashHandler.kt`
+- `ios/RunningApp/Utils/CrashHandler.swift`
 

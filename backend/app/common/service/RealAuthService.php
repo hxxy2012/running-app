@@ -16,8 +16,17 @@ class RealAuthService
     {
         $config = config('realauth');
         $this->provider = $config['provider'] ?? 'aliyun';
-        $this->accessKeyId = $config['access_key_id'] ?? '';
-        $this->accessKeySecret = $config['access_key_secret'] ?? '';
+
+        // 根据不同的服务商读取对应的配置
+        $providerConfig = $config[$this->provider] ?? [];
+
+        if ($this->provider === 'aliyun') {
+            $this->accessKeyId = $providerConfig['access_key_id'] ?? '';
+            $this->accessKeySecret = $providerConfig['access_key_secret'] ?? '';
+        } elseif ($this->provider === 'tencent') {
+            $this->accessKeyId = $providerConfig['secret_id'] ?? '';
+            $this->accessKeySecret = $providerConfig['secret_key'] ?? '';
+        }
     }
 
     /**

@@ -1,5 +1,63 @@
 # 更新日志 (Changelog)
 
+## [v1.5.9 Patch] - 2025-11-17
+
+### 修复问题 🐛
+
+#### 安全漏洞修复
+- **SmsService.php** - 修复SSL验证被禁用的安全漏洞
+  - 启用CURLOPT_SSL_VERIFYPEER防止中间人攻击
+  - 添加SSL_VERIFYHOST验证
+  - 添加10秒超时设置
+  - 完善curl错误处理和JSON解析检查
+
+#### 配置读取修复
+- **SmsService.php** - 修复配置读取错误
+  - 正确读取不同服务商的分层配置
+  - 支持阿里云和腾讯云配置隔离
+
+- **RealAuthService.php** - 修复配置读取错误
+  - 正确读取不同服务商的分层配置
+  - 支持阿里云和腾讯云配置隔离
+
+#### 输入验证和错误处理
+- **Crash.php** - 完善输入验证和错误处理
+  - 添加日志内容大小限制（最大1MB）防止DOS攻击
+  - 添加file_put_contents返回值检查
+  - 修复uploadFile方法的文件路径问题
+  - 批量上传添加保护机制
+
+#### Android代码优化
+- **CrashHandler.kt** - 修复多个问题
+  - 修复变量引用错误（使用crashInfo.appVersion）
+  - 更新废弃的MediaType.parse()为MediaType.get()
+  - 添加HTTP超时配置（10秒）
+  - 使用response.use{}确保资源正确关闭
+
+#### iOS代码优化
+- **CrashHandler.swift** - 改进错误处理
+  - 使用crashInfo.appVersion而不是每次读取
+  - 添加URLRequest超时配置
+  - 配置URLSession超时参数
+
+### 影响 📊
+
+- ✅ **安全性提升**: 防止中间人攻击和DOS攻击
+- ✅ **稳定性提升**: 完善错误处理，防止静默失败
+- ✅ **正确性提升**: 修复配置读取和数据引用错误
+- ✅ **代码质量**: 使用现代API，改进资源管理
+
+### 修复统计
+
+- 修复文件数: 5个
+- 修复问题数: 12个
+- 高严重性: 3个
+- 中严重性: 9个
+
+详见 [BUG_FIXES_v1.5.9_PATCH.md](BUG_FIXES_v1.5.9_PATCH.md)
+
+---
+
 ## [v1.5.9] - 2025-11-17
 
 ### 新增功能 🎉

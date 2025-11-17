@@ -192,7 +192,7 @@ class CrashHandler {
 
                 let parameters: [String: Any] = [
                     "platform": "ios",
-                    "app_version": DeviceHelper.shared.appVersion,
+                    "app_version": crashInfo.appVersion,
                     "os_version": DeviceHelper.shared.osVersion,
                     "device_model": DeviceHelper.shared.deviceModel,
                     "crash_time": dateFormatter.string(from: crashInfo.timestamp),
@@ -211,9 +211,16 @@ class CrashHandler {
                 request.httpMethod = "POST"
                 request.setValue("application/json", forHTTPHeaderField: "Content-Type")
                 request.httpBody = jsonData
+                request.timeoutInterval = 10  // 10秒超时
+
+                // 配置URLSession
+                let config = URLSessionConfiguration.default
+                config.timeoutIntervalForRequest = 10
+                config.timeoutIntervalForResource = 30
+                let session = URLSession(configuration: config)
 
                 // 发送请求
-                let (data, response) = try await URLSession.shared.data(for: request)
+                let (data, response) = try await session.data(for: request)
 
                 if let httpResponse = response as? HTTPURLResponse {
                     if httpResponse.statusCode == 200 {

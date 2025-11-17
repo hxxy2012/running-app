@@ -184,6 +184,7 @@ open RunningApp.xcworkspace
 | [DEPLOYMENT.md](DEPLOYMENT.md) | 部署指南 |
 | [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md) | ⭐ Docker部署指南（推荐） |
 | [BUG_FIXES_REPORT.md](BUG_FIXES_REPORT.md) | Bug修复报告 |
+| [BUG_FIXES_v1.5.9_PATCH.md](BUG_FIXES_v1.5.9_PATCH.md) | 🔴 v1.5.9补丁修复报告（重要） |
 | [PHASE_8_9_REPORT.md](PHASE_8_9_REPORT.md) | Phase 8-9实现报告 |
 | [FINAL_COMPLETION_REPORT.md](FINAL_COMPLETION_REPORT.md) | 最终完成报告 |
 | [COMPLETION_REPORT_v1.5.8.md](COMPLETION_REPORT_v1.5.8.md) | v1.5.8完成报告 |
