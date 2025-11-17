@@ -182,11 +182,14 @@ open RunningApp.xcworkspace
 | [API.md](API.md) | API接口文档（74个接口） |
 | [DATABASE.md](DATABASE.md) | 数据库设计文档（30个表） |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | 部署指南 |
+| [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md) | ⭐ Docker部署指南（推荐） |
 | [BUG_FIXES_REPORT.md](BUG_FIXES_REPORT.md) | Bug修复报告 |
 | [PHASE_8_9_REPORT.md](PHASE_8_9_REPORT.md) | Phase 8-9实现报告 |
 | [FINAL_COMPLETION_REPORT.md](FINAL_COMPLETION_REPORT.md) | 最终完成报告 |
-| [COMPLETION_REPORT_v1.5.8.md](COMPLETION_REPORT_v1.5.8.md) | v1.5.8完成报告（最新） |
+| [COMPLETION_REPORT_v1.5.8.md](COMPLETION_REPORT_v1.5.8.md) | v1.5.8完成报告 |
+| [COMPLETION_REPORT_v1.5.9.md](COMPLETION_REPORT_v1.5.9.md) | ⭐ v1.5.9完成报告（最新） |
 | [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) | ⭐ 第三方服务集成指南 |
+| [CHANGELOG.md](CHANGELOG.md) | 版本更新日志 |
 | [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) | 项目总结 |
 
 ---
@@ -317,6 +320,24 @@ await loginViewModel.login()
 - **Android开发**: Kotlin + Jetpack Compose
 - **iOS开发**: Swift + SwiftUI
 - **架构设计**: MVVM + Clean Architecture
+
+---
+
+## 🤝 参与贡献
+
+我们欢迎所有形式的贡献！在参与之前，请阅读以下文档：
+
+- [贡献指南](CONTRIBUTING.md) - 如何提交代码、报告Bug、提出新功能
+- [行为准则](CODE_OF_CONDUCT.md) - 社区行为规范
+- [安全政策](SECURITY.md) - 如何报告安全漏洞
+
+### 快速开始贡献
+
+1. Fork 本项目
+2. 创建您的特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交您的更改 (`git commit -m 'feat: Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 提交 Pull Request
 
 ---
 

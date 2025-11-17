@@ -1,0 +1,60 @@
+# Git 相关
+.git
+.gitignore
+.gitattributes
+
+# IDE 相关
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# 依赖目录
+node_modules
+vendor
+
+# 运行时文件
+runtime/*
+!runtime/.gitignore
+
+# 上传文件
+uploads/*
+!uploads/.gitignore
+
+# 崩溃日志
+crash_logs/*
+!crash_logs/.gitignore
+
+# 环境配置
+.env
+.env.local
+.env.*.local
+
+# 日志
+*.log
+logs
+
+# 临时文件
+*.tmp
+*.cache
+*.bak
+*.swp
+.DS_Store
+Thumbs.db
+
+# 测试相关
+tests
+.phpunit.result.cache
+phpunit.xml
+
+# 文档
+README.md
+CHANGELOG.md
+docs
+
+# 部署脚本
+deploy.sh
+docker-compose.yml
+Dockerfile
+docker

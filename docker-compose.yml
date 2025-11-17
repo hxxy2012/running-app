@@ -1,0 +1,93 @@
+version: '3.8'
+
+services:
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: running-app-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root123456}
+      MYSQL_DATABASE: ${DB_DATABASE:-running_app}
+      MYSQL_USER: ${DB_USERNAME:-running}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-running123}
+      TZ: Asia/Shanghai
+    ports:
+      - "${DB_PORT:-3306}:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./backend/database/running_app.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-root123456}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PHP 后端
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: running-app-backend
+    restart: always
+    ports:
+      - "${BACKEND_PORT:-8000}:80"
+    volumes:
+      - ./backend:/var/www/html
+      - backend_runtime:/var/www/html/runtime
+      - backend_uploads:/var/www/html/uploads
+      - backend_crash_logs:/var/www/html/crash_logs
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-running_app}
+      DB_USERNAME: ${DB_USERNAME:-running}
+      DB_PASSWORD: ${DB_PASSWORD:-running123}
+      TZ: Asia/Shanghai
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/api/config"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Redis 缓存 (可选)
+  redis:
+    image: redis:7-alpine
+    container_name: running-app-redis
+    restart: always
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-redis123}
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  running-app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  redis_data:
+    driver: local
+  backend_runtime:
+    driver: local
+  backend_uploads:
+    driver: local
+  backend_crash_logs:
+    driver: local

@@ -1,0 +1,446 @@
+{
+	"info": {
+		"_postman_id": "running-app-api-collection",
+		"name": "Running App API",
+		"description": "Running App 完整API测试集合\n\n版本: v1.5.9\n更新日期: 2025-11-17\n\n使用说明:\n1. 导入此文件到Postman\n2. 设置环境变量 {{base_url}} 为你的API地址\n3. 先调用登录接口获取token\n4. token会自动保存，其他接口自动使用",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"item": [
+		{
+			"name": "认证相关",
+			"item": [
+				{
+					"name": "发送验证码",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"phone\": \"13800138000\",\n    \"type\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/send-code",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "send-code"]
+						}
+					}
+				},
+				{
+					"name": "用户注册",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"phone\": \"13800138000\",\n    \"code\": \"123456\",\n    \"password\": \"password123\",\n    \"nickname\": \"测试用户\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/register",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "register"]
+						}
+					}
+				},
+				{
+					"name": "用户登录",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"if (jsonData.code === 200 && jsonData.data.token) {",
+									"    pm.environment.set(\"token\", jsonData.data.token);",
+									"    console.log(\"Token已保存:\", jsonData.data.token);",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"phone\": \"13800138000\",\n    \"password\": \"password123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/auth/login",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "login"]
+						}
+					}
+				},
+				{
+					"name": "刷新Token",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/auth/refresh-token",
+							"host": ["{{base_url}}"],
+							"path": ["auth", "refresh-token"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "用户管理",
+			"item": [
+				{
+					"name": "获取个人信息",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/user/profile",
+							"host": ["{{base_url}}"],
+							"path": ["user", "profile"]
+						}
+					}
+				},
+				{
+					"name": "更新个人信息",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"nickname\": \"新昵称\",\n    \"gender\": 1,\n    \"birthday\": \"1990-01-01\",\n    \"height\": 175,\n    \"weight\": 70,\n    \"city\": \"北京市\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user/profile",
+							"host": ["{{base_url}}"],
+							"path": ["user", "profile"]
+						}
+					}
+				},
+				{
+					"name": "修改密码",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"old_password\": \"password123\",\n    \"new_password\": \"newpassword123\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user/password",
+							"host": ["{{base_url}}"],
+							"path": ["user", "password"]
+						}
+					}
+				},
+				{
+					"name": "实名认证",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"real_name\": \"张三\",\n    \"id_card\": \"110101199001011234\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/user/real-auth",
+							"host": ["{{base_url}}"],
+							"path": ["user", "real-auth"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "跑步记录",
+			"item": [
+				{
+					"name": "开始跑步",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{base_url}}/running/start",
+							"host": ["{{base_url}}"],
+							"path": ["running", "start"]
+						}
+					}
+				},
+				{
+					"name": "上传轨迹点",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"record_id\": 1,\n    \"points\": [\n        {\n            \"latitude\": 39.9042,\n            \"longitude\": 116.4074,\n            \"altitude\": 50.0,\n            \"speed\": 3.5,\n            \"timestamp\": \"2025-11-17 10:00:00\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/running/upload-point",
+							"host": ["{{base_url}}"],
+							"path": ["running", "upload-point"]
+						}
+					}
+				},
+				{
+					"name": "结束跑步",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"record_id\": 1,\n    \"distance\": 5000,\n    \"duration\": 1800,\n    \"calories\": 300,\n    \"avg_pace\": 360,\n    \"avg_speed\": 10.0,\n    \"best_pace\": 300,\n    \"steps\": 6000,\n    \"total_ascent\": 50,\n    \"total_descent\": 40\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/running/finish",
+							"host": ["{{base_url}}"],
+							"path": ["running", "finish"]
+						}
+					}
+				},
+				{
+					"name": "获取记录列表",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/running/records?page=1&limit=20&type=all",
+							"host": ["{{base_url}}"],
+							"path": ["running", "records"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "20"
+								},
+								{
+									"key": "type",
+									"value": "all"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "记录详情",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/running/record/1",
+							"host": ["{{base_url}}"],
+							"path": ["running", "record", "1"]
+						}
+					}
+				},
+				{
+					"name": "删除记录",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/running/record/1",
+							"host": ["{{base_url}}"],
+							"path": ["running", "record", "1"]
+						}
+					}
+				},
+				{
+					"name": "统计数据",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/running/statistics?type=all",
+							"host": ["{{base_url}}"],
+							"path": ["running", "statistics"],
+							"query": [
+								{
+									"key": "type",
+									"value": "all"
+								}
+							]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "社交功能",
+			"item": [
+				{
+					"name": "发布动态",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"content\": \"今天跑了5公里，感觉很棒！\",\n    \"images\": [\"https://example.com/image1.jpg\"],\n    \"record_id\": 1\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/post",
+							"host": ["{{base_url}}"],
+							"path": ["post"]
+						}
+					}
+				},
+				{
+					"name": "动态流",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/post/feed?page=1",
+							"host": ["{{base_url}}"],
+							"path": ["post", "feed"],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					}
+				},
+				{
+					"name": "点赞",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/post/1/like",
+							"host": ["{{base_url}}"],
+							"path": ["post", "1", "like"]
+						}
+					}
+				},
+				{
+					"name": "评论",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"content\": \"加油！\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/post/1/comment",
+							"host": ["{{base_url}}"],
+							"path": ["post", "1", "comment"]
+						}
+					}
+				},
+				{
+					"name": "关注用户",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/follow/2",
+							"host": ["{{base_url}}"],
+							"path": ["follow", "2"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "崩溃日志",
+			"item": [
+				{
+					"name": "上传崩溃日志",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "json",
+							"raw": "{\n    \"platform\": \"android\",\n    \"app_version\": \"1.0.0\",\n    \"os_version\": \"Android 13\",\n    \"device_model\": \"Pixel 6\",\n    \"crash_time\": \"2025-11-17 10:30:00\",\n    \"log_content\": \"java.lang.NullPointerException\\n  at com.example.MainActivity.onCreate()\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/crash/upload",
+							"host": ["{{base_url}}"],
+							"path": ["crash", "upload"]
+						}
+					}
+				}
+			]
+		},
+		{
+			"name": "公共接口",
+			"item": [
+				{
+					"name": "获取配置",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/config",
+							"host": ["{{base_url}}"],
+							"path": ["config"]
+						}
+					}
+				},
+				{
+					"name": "版本检测",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/version?platform=android&version=1.0.0",
+							"host": ["{{base_url}}"],
+							"path": ["version"],
+							"query": [
+								{
+									"key": "platform",
+									"value": "android"
+								},
+								{
+									"key": "version",
+									"value": "1.0.0"
+								}
+							]
+						}
+					}
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8000/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
