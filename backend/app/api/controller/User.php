@@ -196,8 +196,80 @@ class User extends Base
         $user->status = 0;
         $user->save();
 
-        // TODO: 清理用户相关数据（可选）
+        // 清理用户相关数据
+        $this->cleanUserData($this->userId);
 
         return $this->success([], '账号已注销');
+    }
+
+    /**
+     * 清理用户相关数据
+     * @param int $userId 用户ID
+     */
+    private function cleanUserData($userId)
+    {
+        try {
+            // 1. 删除跑步记录和轨迹点
+            $recordIds = \app\common\model\RunningRecord::where('user_id', $userId)->column('id');
+            if (!empty($recordIds)) {
+                // 删除轨迹点
+                \app\common\model\TrackPoint::whereIn('record_id', $recordIds)->delete();
+                // 删除跑步记录
+                \app\common\model\RunningRecord::where('user_id', $userId)->delete();
+            }
+
+            // 2. 删除或匿名化动态（这里选择删除）
+            $postIds = \app\common\model\Post::where('user_id', $userId)->column('id');
+            if (!empty($postIds)) {
+                // 删除动态的点赞
+                \app\common\model\Like::whereIn('post_id', $postIds)->where('type', 'post')->delete();
+                // 删除动态的评论
+                \app\common\model\Comment::whereIn('post_id', $postIds)->delete();
+                // 删除动态
+                \app\common\model\Post::where('user_id', $userId)->delete();
+            }
+
+            // 3. 删除用户的点赞和评论
+            \app\common\model\Like::where('user_id', $userId)->delete();
+            \app\common\model\Comment::where('user_id', $userId)->delete();
+
+            // 4. 删除关注关系
+            \app\common\model\Follow::where('user_id', $userId)->delete();
+            \app\common\model\Follow::where('follow_user_id', $userId)->delete();
+
+            // 5. 删除装备
+            \app\common\model\Equipment::where('user_id', $userId)->delete();
+
+            // 6. 删除消息
+            \app\common\model\Message::where('user_id', $userId)->delete();
+            \app\common\model\Message::where('from_user_id', $userId)->delete();
+
+            // 7. 删除反馈
+            \app\common\model\Feedback::where('user_id', $userId)->delete();
+
+            // 8. 删除用户训练计划
+            \app\common\model\UserTrainingPlan::where('user_id', $userId)->delete();
+
+            // 9. 删除用户挑战
+            \app\common\model\UserChallenge::where('user_id', $userId)->delete();
+
+            // 10. 删除用户成就
+            \app\common\model\UserAchievement::where('user_id', $userId)->delete();
+
+            // 11. 删除跑团成员关系
+            \app\common\model\ClubMember::where('user_id', $userId)->delete();
+
+            // 12. 删除第三方登录绑定
+            \app\common\model\UserOauth::where('user_id', $userId)->delete();
+
+            // 13. 从排行榜中删除
+            \app\common\model\Ranking::where('user_id', $userId)->delete();
+
+            return true;
+        } catch (\Exception $e) {
+            // 记录日志但不影响主流程
+            trace('清理用户数据失败: ' . $e->getMessage(), 'error');
+            return false;
+        }
     }
 }

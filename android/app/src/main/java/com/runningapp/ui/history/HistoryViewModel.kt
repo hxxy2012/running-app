@@ -80,6 +80,13 @@ class HistoryViewModel @Inject constructor(
     }
 
     /**
+     * 根据ID获取记录
+     */
+    fun getRecordById(recordId: Int): Flow<RunningRecordEntity?> {
+        return runningRepository.getRecordDetailLocal(recordId)
+    }
+
+    /**
      * 删除记录
      */
     fun deleteRecord(recordId: Int) {

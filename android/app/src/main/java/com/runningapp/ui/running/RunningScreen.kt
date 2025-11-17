@@ -21,7 +21,8 @@ import com.runningapp.utils.LocationUtils
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RunningScreen(
-    viewModel: RunningViewModel = hiltViewModel()
+    viewModel: RunningViewModel = hiltViewModel(),
+    onRecordDetailClick: (Int) -> Unit = {}
 ) {
     val runningState by viewModel.runningState.collectAsState()
     val runningData by viewModel.runningData.collectAsState()
@@ -277,7 +278,7 @@ fun RunningScreen(
             confirmButton = {
                 TextButton(onClick = {
                     viewModel.dismissFinishDialog()
-                    // TODO: 导航到记录详情页面
+                    onRecordDetailClick(record.id)
                 }) {
                     Text("查看详情")
                 }

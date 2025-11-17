@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.7-blue)
+![Version](https://img.shields.io/badge/version-1.5.8-blue)
 ![Backend](https://img.shields.io/badge/backend-100%25-brightgreen)
 ![Android](https://img.shields.io/badge/android-100%25-brightgreen)
 ![iOS](https://img.shields.io/badge/iOS-100%25-brightgreen)
@@ -185,6 +185,7 @@ open RunningApp.xcworkspace
 | [BUG_FIXES_REPORT.md](BUG_FIXES_REPORT.md) | Bug修复报告 |
 | [PHASE_8_9_REPORT.md](PHASE_8_9_REPORT.md) | Phase 8-9实现报告 |
 | [FINAL_COMPLETION_REPORT.md](FINAL_COMPLETION_REPORT.md) | 最终完成报告 |
+| [COMPLETION_REPORT_v1.5.8.md](COMPLETION_REPORT_v1.5.8.md) | v1.5.8完成报告（最新） |
 | [PROJECT_SUMMARY.md](PROJECT_SUMMARY.md) | 项目总结 |
 
 ---
@@ -321,7 +322,7 @@ await loginViewModel.login()
 ## 📞 联系方式
 
 - **项目名称**: Running App
-- **当前版本**: v1.5.7
+- **当前版本**: v1.5.8
 - **最后更新**: 2025-11-17
 
 ---

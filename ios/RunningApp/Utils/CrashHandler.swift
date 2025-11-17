@@ -186,10 +186,45 @@ class CrashHandler {
     private func uploadCrashReport(_ crashInfo: CrashInfo) {
         Task {
             do {
-                // TODO: 实现上传到服务器的逻辑
-                Logger.d("Crash report uploaded")
+                // 构建请求体
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+
+                let parameters: [String: Any] = [
+                    "platform": "ios",
+                    "app_version": DeviceHelper.shared.appVersion,
+                    "os_version": DeviceHelper.shared.osVersion,
+                    "device_model": DeviceHelper.shared.deviceModel,
+                    "crash_time": dateFormatter.string(from: crashInfo.timestamp),
+                    "log_content": crashInfo.stackTrace
+                ]
+
+                let jsonData = try JSONSerialization.data(withJSONObject: parameters)
+
+                // 创建请求（需要替换为实际的API地址）
+                guard let url = URL(string: "YOUR_API_BASE_URL/crash/upload") else {
+                    Logger.e("Invalid crash upload URL")
+                    return
+                }
+
+                var request = URLRequest(url: url)
+                request.httpMethod = "POST"
+                request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+                request.httpBody = jsonData
+
+                // 发送请求
+                let (data, response) = try await URLSession.shared.data(for: request)
+
+                if let httpResponse = response as? HTTPURLResponse {
+                    if httpResponse.statusCode == 200 {
+                        Logger.d("Crash report uploaded successfully")
+                    } else {
+                        Logger.e("Failed to upload crash report: \(httpResponse.statusCode)")
+                    }
+                }
             } catch {
                 Logger.e("Failed to upload crash report", error: error)
+                // 上传失败不影响崩溃处理流程
             }
         }
     }
@@ -343,8 +378,73 @@ extension CrashHandler {
 
     /// 导出崩溃报告为ZIP
     func exportCrashReportsAsZip() -> URL? {
-        // TODO: 实现ZIP压缩导出
-        return nil
+        do {
+            let crashReports = getAllCrashReports()
+            if crashReports.isEmpty {
+                Logger.w("No crash reports to export")
+                return nil
+            }
+
+            // 创建临时目录存放要压缩的文件
+            let tempDirectory = FileManager.default.temporaryDirectory
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss"
+            let exportFolderName = "crash_reports_\(dateFormatter.string(from: Date()))"
+            let exportFolder = tempDirectory.appendingPathComponent(exportFolderName)
+
+            // 删除已存在的目录
+            if FileManager.default.fileExists(atPath: exportFolder.path) {
+                try FileManager.default.removeItem(at: exportFolder)
+            }
+
+            // 创建导出目录
+            try FileManager.default.createDirectory(at: exportFolder, withIntermediateDirectories: true)
+
+            // 复制所有崩溃报告到导出目录
+            for crashReport in crashReports {
+                let destURL = exportFolder.appendingPathComponent(crashReport.lastPathComponent)
+                try FileManager.default.copyItem(at: crashReport, to: destURL)
+            }
+
+            // 使用系统ZIP压缩
+            let zipURL = tempDirectory.appendingPathComponent("\(exportFolderName).zip")
+
+            // 删除已存在的ZIP文件
+            if FileManager.default.fileExists(atPath: zipURL.path) {
+                try FileManager.default.removeItem(at: zipURL)
+            }
+
+            // 执行ZIP压缩
+            var coordinatorError: NSError?
+            NSFileCoordinator().coordinate(readingItemAt: exportFolder, options: [.forUploading], error: &coordinatorError) { zipFileURL in
+                do {
+                    try FileManager.default.copyItem(at: zipFileURL, to: zipURL)
+                    Logger.d("Crash reports exported to ZIP: \(exportFolderName).zip")
+                } catch {
+                    Logger.e("Failed to copy ZIP file", error: error)
+                }
+            }
+
+            // 清理临时文件夹
+            try? FileManager.default.removeItem(at: exportFolder)
+
+            if let error = coordinatorError {
+                Logger.e("File coordinator error", error: error)
+                return nil
+            }
+
+            // 验证ZIP文件是否创建成功
+            guard FileManager.default.fileExists(atPath: zipURL.path) else {
+                Logger.e("ZIP file was not created")
+                return nil
+            }
+
+            return zipURL
+
+        } catch {
+            Logger.e("Failed to export crash reports", error: error)
+            return nil
+        }
     }
 }
 

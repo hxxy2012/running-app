@@ -1,6 +1,7 @@
 package com.runningapp.data.remote
 
 import com.runningapp.data.remote.dto.*
+import com.runningapp.data.remote.model.*
 import retrofit2.http.*
 
 /**
@@ -102,4 +103,17 @@ interface ApiService {
         @Query("lat") lat: Double? = null,
         @Query("lon") lon: Double? = null
     ): ApiResponse<WeatherDto>
+
+    // ========== 崩溃日志 ==========
+
+    @POST("crash/upload")
+    suspend fun uploadCrashLog(@Body request: CrashLogRequest): ApiResponse<Any>
+
+    @Multipart
+    @POST("crash/upload-file")
+    suspend fun uploadCrashFile(
+        @Part file: okhttp3.MultipartBody.Part,
+        @Query("platform") platform: String,
+        @Query("app_version") appVersion: String
+    ): ApiResponse<Any>
 }

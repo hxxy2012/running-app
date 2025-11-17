@@ -176,11 +176,39 @@ class CrashHandler @Inject constructor(
     private fun uploadCrashReport(crashInfo: CrashInfo) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
-                // TODO: 实现上传到服务器的逻辑
-                // 这里可以调用API上传崩溃报告
-                Logger.d("CrashHandler", "Crash report uploaded")
+                // 构建请求体
+                val json = """
+                    {
+                        "platform": "android",
+                        "app_version": "${deviceHelper.appVersion}",
+                        "os_version": "${Build.VERSION.RELEASE}",
+                        "device_model": "${Build.MODEL}",
+                        "crash_time": "${SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date(crashInfo.timestamp))}",
+                        "log_content": ${org.json.JSONObject.quote(crashInfo.stackTrace)}
+                    }
+                """.trimIndent()
+
+                // 使用 OkHttp 上传（需要从 AppModule 获取 baseUrl，这里使用硬编码）
+                val client = okhttp3.OkHttpClient()
+                val requestBody = okhttp3.RequestBody.create(
+                    okhttp3.MediaType.parse("application/json; charset=utf-8"),
+                    json
+                )
+                val request = okhttp3.Request.Builder()
+                    .url("YOUR_API_BASE_URL/crash/upload")  // 需要替换为实际的API地址
+                    .post(requestBody)
+                    .build()
+
+                val response = client.newCall(request).execute()
+                if (response.isSuccessful) {
+                    Logger.d("CrashHandler", "Crash report uploaded successfully")
+                } else {
+                    Logger.e("CrashHandler", "Failed to upload: ${response.code()}")
+                }
+                response.close()
             } catch (e: Exception) {
                 Logger.e("CrashHandler", "Failed to upload crash report", e)
+                // 上传失败不影响崩溃处理流程
             }
         }
     }

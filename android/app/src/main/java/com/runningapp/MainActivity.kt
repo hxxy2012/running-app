@@ -12,10 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavType
+import androidx.navigation.compose.*
+import androidx.navigation.navArgument
+import com.runningapp.ui.history.HistoryScreen
+import com.runningapp.ui.history.RecordDetailScreen
+import com.runningapp.ui.profile.ProfileScreen
+import com.runningapp.ui.running.RunningScreen
+import com.runningapp.ui.social.SocialScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -73,20 +77,36 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(Screen.Home.route) {
-                // 首页 - 跑步界面
-                Text("跑步界面")
+                RunningScreen(
+                    onRecordDetailClick = { recordId ->
+                        navController.navigate("${Screen.RecordDetail.route}/$recordId")
+                    }
+                )
             }
             composable(Screen.History.route) {
-                // 历史记录
-                Text("历史记录")
+                HistoryScreen(
+                    onRecordClick = { recordId ->
+                        navController.navigate("${Screen.RecordDetail.route}/$recordId")
+                    }
+                )
             }
             composable(Screen.Social.route) {
-                // 社交
-                Text("社交动态")
+                SocialScreen()
             }
             composable(Screen.Profile.route) {
-                // 个人中心
-                Text("个人中心")
+                ProfileScreen()
+            }
+            composable(
+                route = "${Screen.RecordDetail.route}/{recordId}",
+                arguments = listOf(
+                    navArgument("recordId") { type = NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val recordId = backStackEntry.arguments?.getInt("recordId") ?: 0
+                RecordDetailScreen(
+                    recordId = recordId,
+                    onBack = { navController.popBackStack() }
+                )
             }
         }
     }
@@ -129,4 +149,5 @@ sealed class Screen(val route: String) {
     object Profile : Screen("profile")
     object Login : Screen("login")
     object Running : Screen("running")
+    object RecordDetail : Screen("record_detail")
 }

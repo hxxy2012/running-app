@@ -138,3 +138,10 @@ Route::group(function () {
 // ========== 无需认证的公共接口 ==========
 Route::get('config', 'api.Common/config');                        // 获取配置
 Route::get('version', 'api.Common/version');                      // 版本检测
+
+// ========== 崩溃日志（无需认证） ==========
+Route::group('crash', function () {
+    Route::post('upload', 'Crash/upload');                        // 上传崩溃日志
+    Route::post('upload-file', 'Crash/uploadFile');               // 上传崩溃日志文件
+    Route::post('batch-upload', 'Crash/batchUpload');             // 批量上传崩溃日志
+})->prefix('api.Crash/');
