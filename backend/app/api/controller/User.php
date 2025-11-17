@@ -164,7 +164,13 @@ class User extends Base
             return $this->error('已经实名认证过了');
         }
 
-        // TODO: 调用第三方实名认证接口
+        // 调用实名认证服务
+        $realAuthService = new \app\common\service\RealAuthService();
+        $result = $realAuthService->verify($realName, $idCard);
+
+        if ($result['code'] !== 200) {
+            return $this->error($result['message']);
+        }
 
         $user->real_name = $realName;
         $user->id_card = $idCard;

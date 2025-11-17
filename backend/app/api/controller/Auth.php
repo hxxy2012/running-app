@@ -49,8 +49,13 @@ class Auth extends Base
                 'expire_time' => date('Y-m-d H:i:s', time() + 300), // 5分钟过期
             ]);
 
-            // 发送短信（这里简化处理，实际需要调用短信服务商API）
-            // SmsService::send($phone, $code);
+            // 发送短信
+            $smsService = new \app\common\service\SmsService();
+            $result = $smsService->sendVerifyCode($phone, $code);
+
+            if ($result['code'] !== 200) {
+                return $this->error($result['message']);
+            }
 
             // 开发环境下返回验证码（生产环境删除）
             $debugData = config('app.app_debug') ? ['code' => $code] : [];
