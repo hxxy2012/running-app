@@ -1,0 +1,128 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: running-app-api
+  namespace: running-app
+  labels:
+    app: running-app
+    component: api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: running-app
+      component: api
+  template:
+    metadata:
+      labels:
+        app: running-app
+        component: api
+    spec:
+      containers:
+      - name: api
+        image: running-app/api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          name: http
+          protocol: TCP
+        env:
+        - name: APP_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: APP_DEBUG
+        - name: APP_TIMEZONE
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: APP_TIMEZONE
+        - name: DB_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: DB_TYPE
+        - name: DB_HOSTNAME
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: DB_HOSTNAME
+        - name: DB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: DB_DATABASE
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: running-app-secret
+              key: DB_USERNAME
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: running-app-secret
+              key: DB_PASSWORD
+        - name: REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: REDIS_HOST
+        - name: REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: running-app-config
+              key: REDIS_PORT
+        - name: JWT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: running-app-secret
+              key: JWT_SECRET
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health/alive
+            port: 80
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        volumeMounts:
+        - name: uploads
+          mountPath: /var/www/html/public/uploads
+      volumes:
+      - name: uploads
+        persistentVolumeClaim:
+          claimName: running-app-uploads-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: running-app-api-service
+  namespace: running-app
+  labels:
+    app: running-app
+    component: api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+    protocol: TCP
+    name: http
+  selector:
+    app: running-app
+    component: api

@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: running-app-config
+  namespace: running-app
+data:
+  # 应用配置
+  APP_DEBUG: "false"
+  APP_TIMEZONE: "Asia/Shanghai"
+
+  # 数据库配置（非敏感信息）
+  DB_TYPE: "mysql"
+  DB_HOSTNAME: "mysql-service"
+  DB_HOSTPORT: "3306"
+  DB_DATABASE: "running_app"
+  DB_CHARSET: "utf8mb4"
+
+  # Redis配置
+  REDIS_HOST: "redis-service"
+  REDIS_PORT: "6379"
+  REDIS_SELECT: "0"
+
+  # 缓存配置
+  CACHE_DRIVER: "redis"
+  CACHE_PREFIX: "running_app:"
+
+  # 队列配置
+  QUEUE_DRIVER: "redis"
+  QUEUE_SELECT: "1"

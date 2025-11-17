@@ -6,25 +6,34 @@
 namespace app\api\controller;
 
 use app\common\model\User as UserModel;
+use app\common\service\CacheService;
 use think\facade\Filesystem;
 
 class User extends Base
 {
     /**
-     * 获取个人信息
+     * 获取个人信息（带缓存）
      * GET /api/user/profile
      */
     public function profile()
     {
         $userId = $this->request->param('user_id', $this->userId);
 
-        $user = UserModel::find($userId);
+        // 使用缓存获取用户信息
+        $user = CacheService::remember(
+            CacheService::key(CacheService::KEY_USER, "profile:{$userId}"),
+            function() use ($userId) {
+                $user = UserModel::find($userId);
+                return $user ? $user->toArray() : null;
+            },
+            CacheService::LONG_TTL
+        );
 
         if (!$user) {
             return $this->error('用户不存在');
         }
 
-        $data = $user->toArray();
+        $data = $user;
 
         // 如果查看别人的信息，添加关注状态
         if ($userId != $this->userId) {
@@ -67,6 +76,10 @@ class User extends Base
         try {
             $user->save($updateData);
 
+            // 清除用户缓存
+            CacheService::delete(CacheService::key(CacheService::KEY_USER, "profile:{$this->userId}"));
+            CacheService::deleteUserInfo($this->userId);
+
             return $this->success($user->toArray(), '更新成功');
 
         } catch (\Exception $e) {
@@ -99,6 +112,10 @@ class User extends Base
             $user = UserModel::find($this->userId);
             $user->avatar = $url;
             $user->save();
+
+            // 清除用户缓存
+            CacheService::delete(CacheService::key(CacheService::KEY_USER, "profile:{$this->userId}"));
+            CacheService::deleteUserInfo($this->userId);
 
             return $this->success([
                 'url' => $url,

@@ -1,0 +1,213 @@
+version: '3.8'
+
+services:
+  # Nginx反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: running-app-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./config/nginx.conf.example:/etc/nginx/conf.d/default.conf:ro
+      - ./backend/public:/var/www/html/public:ro
+      - nginx_logs:/var/log/nginx
+      - ssl_certs:/etc/nginx/ssl
+    depends_on:
+      - backend
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # MySQL 数据库
+  mysql:
+    image: mysql:8.0
+    container_name: running-app-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_root_password
+      MYSQL_DATABASE: ${DB_DATABASE:-running_app}
+      MYSQL_USER: ${DB_USERNAME:-running}
+      MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+      TZ: Asia/Shanghai
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - mysql_config:/etc/mysql/conf.d
+      - mysql_logs:/var/log/mysql
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --max_connections=200
+      --innodb_buffer_pool_size=2G
+      --innodb_log_file_size=256M
+      --slow_query_log=1
+      --slow_query_log_file=/var/log/mysql/slow-query.log
+      --long_query_time=1
+    secrets:
+      - mysql_root_password
+      - mysql_password
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis 缓存
+  redis:
+    image: redis:7-alpine
+    container_name: running-app-redis
+    restart: always
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+      - redis_config:/usr/local/etc/redis
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --requirepass ${REDIS_PASSWORD}
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PHP 后端
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      args:
+        - PHP_VERSION=8.0
+    container_name: running-app-backend
+    restart: always
+    volumes:
+      - ./backend:/var/www/html:ro
+      - backend_runtime:/var/www/html/runtime
+      - backend_uploads:/var/www/html/public/uploads
+      - backend_logs:/var/www/html/runtime/log
+    environment:
+      APP_DEBUG: "false"
+      APP_ENV: production
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-running_app}
+      DB_USERNAME: ${DB_USERNAME:-running}
+      DB_PASSWORD_FILE: /run/secrets/mysql_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      CACHE_DRIVER: redis
+      QUEUE_DRIVER: redis
+      JWT_SECRET_FILE: /run/secrets/jwt_secret
+      TZ: Asia/Shanghai
+    secrets:
+      - mysql_password
+      - jwt_secret
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - running-app-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # 队列Worker
+  queue-worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: running-app-queue-worker
+    restart: always
+    command: php think queue:work --daemon
+    volumes:
+      - ./backend:/var/www/html:ro
+      - backend_runtime:/var/www/html/runtime
+      - backend_logs:/var/www/html/runtime/log
+    environment:
+      APP_DEBUG: "false"
+      APP_ENV: production
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: ${DB_DATABASE:-running_app}
+      DB_USERNAME: ${DB_USERNAME:-running}
+      DB_PASSWORD_FILE: /run/secrets/mysql_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      QUEUE_DRIVER: redis
+      TZ: Asia/Shanghai
+    secrets:
+      - mysql_password
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - running-app-network
+    deploy:
+      replicas: 2
+
+# Docker Secrets (生产环境)
+secrets:
+  mysql_root_password:
+    external: true
+  mysql_password:
+    external: true
+  jwt_secret:
+    external: true
+
+networks:
+  running-app-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
+    driver: local
+  mysql_config:
+    driver: local
+  mysql_logs:
+    driver: local
+  redis_data:
+    driver: local
+  redis_config:
+    driver: local
+  backend_runtime:
+    driver: local
+  backend_uploads:
+    driver: local
+  backend_logs:
+    driver: local
+  nginx_logs:
+    driver: local
+  ssl_certs:
+    driver: local
