@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.2-blue)
+![Version](https://img.shields.io/badge/version-1.5.3-blue)
 ![Backend](https://img.shields.io/badge/backend-100%25-brightgreen)
 ![Android](https://img.shields.io/badge/android-100%25-brightgreen)
 ![iOS](https://img.shields.io/badge/iOS-100%25-brightgreen)
@@ -192,8 +192,8 @@ open RunningApp.xcworkspace
 ## 📊 代码统计
 
 ```
-总文件数：138+
-总代码行数：31,900+
+总文件数：146+
+总代码行数：34,700+
 
 后端：
 - 控制器：15个
@@ -207,15 +207,15 @@ Android：
 - Repository：8个
 - ViewModel：8个
 - UI Screen：6个
-- 工具类：11个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils等)
-- 代码：10,010+行
+- 工具类：15个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils/PermissionHelper/BiometricHelper/ShareHelper/NotificationHelper等)
+- 代码：11,050+行
 
 iOS：
 - Model：10个
 - ViewModel：5个
 - View：8个
-- 工具类：10个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils等)
-- 代码：5,400+行
+- 工具类：14个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils/PermissionHelper/BiometricHelper/ShareHelper/NotificationHelper等)
+- 代码：6,810+行
 ```
 
 ---
@@ -321,7 +321,7 @@ await loginViewModel.login()
 ## 📞 联系方式
 
 - **项目名称**: Running App
-- **当前版本**: v1.5.2
+- **当前版本**: v1.5.3
 - **最后更新**: 2025-11-17
 
 ---

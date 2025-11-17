@@ -1,5 +1,171 @@
 # 更新日志 (Changelog)
 
+## [v1.5.3] - 2025-11-17
+
+### 新增功能 🎉
+
+#### 权限管理工具
+- **Android PermissionHelper** (370行)
+  - 定位权限管理（前台/后台/精确定位）
+  - 存储权限（支持Android 13+新权限模型）
+  - 相机、通知、运动识别权限
+  - 权限状态检查（已授予/未授予/永久拒绝）
+  - 权限说明文本生成
+  - 打开系统设置页面
+  - ActivityResultLauncher集成
+  - 权限组预定义（跑步核心权限等）
+
+- **iOS PermissionHelper** (450行)
+  - 定位权限（使用期间/始终允许）
+  - 相册权限（包括Limited状态）
+  - 相机权限
+  - 通知权限
+  - 运动与健身权限
+  - 精确定位检查（iOS 14+）
+  - 权限状态枚举
+  - 权限说明和拒绝提示
+  - SwiftUI修饰符支持
+  - 打开系统设置功能
+
+#### 生物识别工具
+- **Android BiometricHelper** (290行)
+  - 指纹识别支持
+  - 面部识别支持
+  - 生物识别可用性检查
+  - 强/弱生物识别类型
+  - 设备凭据作为备选（PIN/密码）
+  - 认证对话框自定义
+  - 完整的错误处理
+  - 快速认证方法
+  - 错误描述本地化
+
+- **iOS BiometricHelper** (380行)
+  - Touch ID支持
+  - Face ID支持
+  - 生物识别类型检测
+  - LocalAuthentication集成
+  - 认证原因自定义
+  - 备用按钮配置
+  - 多种认证场景（登录/支付/敏感操作）
+  - SwiftUI修饰符
+  - 完整的错误转换
+
+#### 分享工具
+- **Android ShareHelper** (220行)
+  - 分享纯文本
+  - 分享单张/多张图片
+  - 分享文件
+  - 分享Bitmap
+  - 专门的跑步记录分享
+  - 成就分享功能
+  - 分享缓存管理
+  - FileProvider配置
+  - 可用性检查
+
+- **iOS ShareHelper** (380行)
+  - UIActivityViewController集成
+  - 分享文本/图片/URL/文件
+  - iPad Popover支持
+  - 跑步记录分享
+  - 成就分享
+  - 生成精美分享图片
+  - SwiftUI ActivityViewController
+  - 分享选项排除配置
+
+#### 通知管理工具
+- **Android NotificationHelper** (160行)
+  - 通知渠道管理（5种渠道）
+  - 跑步通知（前台服务）
+  - 训练提醒通知
+  - 成就解锁通知
+  - 社交互动通知
+  - 通知权限检查
+  - 取消通知/清除所有
+
+- **iOS NotificationHelper** (200行)
+  - UNUserNotificationCenter集成
+  - 本地通知发送
+  - 定时通知
+  - 重复通知
+  - 每日训练提醒
+  - 通知权限请求
+  - 角标管理
+  - 通知查询（待发送/已发送）
+
+### 技术特性 🔧
+
+#### 用户体验优化
+- 完整的权限请求流程
+- 生物识别快速登录
+- 一键分享到社交平台
+- 智能通知提醒
+
+#### 跨版本兼容
+- Android 8.0+通知渠道
+- Android 10+后台定位
+- Android 13+新权限模型
+- iOS 14+精确定位/相册Limited权限
+
+#### 代码质量
+- 单例模式设计
+- 依赖注入支持
+- 完善的错误处理
+- 友好的用户提示
+
+### 代码统计 📊
+
+- **新增文件**: 8个
+- **新增代码**: 2,796行
+- **Android工具类**: 1,040行
+- **iOS工具类**: 1,410行
+- **功能覆盖**: 权限/生物识别/分享/通知
+
+### 使用示例 💡
+
+#### 权限管理
+```kotlin
+// Android
+permissionHelper.requestPermission(.location(.whenInUse)) { status in
+    if status.isAuthorized { /* 开始跑步 */ }
+}
+
+// iOS
+PermissionHelper.shared.requestRunningCorePermissions { success in
+    if success { /* 开始跑步 */ }
+}
+```
+
+#### 生物识别
+```kotlin
+// Android
+biometricHelper.quickAuthenticate(activity,
+    onSuccess = { /* 登录成功 */ },
+    onError = { error -> /* 显示错误 */ }
+)
+
+// iOS
+BiometricHelper.shared.authenticateForLogin { success in
+    if success { /* 登录成功 */ }
+}
+```
+
+#### 分享
+```kotlin
+// Android - 分享跑步记录
+shareHelper.shareRunningRecord(
+    distance = 5000f, duration = 1800,
+    pace = 6.0f, calories = 300f
+)
+
+// iOS
+ShareHelper.shared.shareRunningRecord(
+    distance: 5000, duration: 1800,
+    from: viewController
+)
+```
+
+---
+
 ## [v1.5.2] - 2025-11-17
 
 ### 新增功能 🎉
