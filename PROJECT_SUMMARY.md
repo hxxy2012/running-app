@@ -132,10 +132,10 @@ Running App 是一个**完整的全栈跑步应用系统**，包含ThinkPHP后�
 ├── 控制器: 15个
 ├── 模型: 20个
 ├── 中间件: 1个
-├── 服务类: 1个
+├── 服务类: 4个 (JWT, Achievement, Challenge, Notification)
 ├── API接口: 74个
 ├── 数据表: 30个
-└── 代码行数: 12,100+
+└── 代码行数: 12,900+
 ```
 
 ### Android客户端（Kotlin）
@@ -146,19 +146,19 @@ Running App 是一个**完整的全栈跑步应用系统**，包含ThinkPHP后�
 ├── ViewModel: 8个 (Login, Running, History, Social, Profile, Training, Challenge, Ranking)
 ├── UI Screen: 6个 (LoginScreen, RegisterScreen, RunningScreen, HistoryScreen, SocialScreen, ProfileScreen)
 ├── Service: 1个 (LocationTrackingService)
-├── 工具类: 3个 (LocationUtils, PreferenceManager, Result)
+├── 工具类: 11个 (ErrorHandler, Logger, NetworkMonitor, CacheManager, ImageCompressor, FormatUtils等)
 ├── Hilt模块: 2个
-└── 代码行数: 8,000+
+└── 代码行数: 10,010+
 ```
 
 ### iOS客户端（Swift）
 ```
-├── Model: 4个
+├── Model: 10个
 ├── Service: 2个 (NetworkService, LocationTrackingService)
-├── ViewModel: 2个 (LoginViewModel, RunningViewModel)
+├── ViewModel: 5个 (Login, Running, History, Social, Profile)
 ├── View: 8个 (ContentView, RunningView, HistoryListView, SocialFeedView, ProfileTabView等)
-├── 工具类: 2个
-└── 代码行数: 3,200+
+├── 工具类: 10个 (ErrorHandler, Logger, NetworkMonitor, CacheManager, ImageCompressor, FormatUtils等)
+└── 代码行数: 5,400+
 ```
 
 ### 文档
@@ -166,14 +166,16 @@ Running App 是一个**完整的全栈跑步应用系统**，包含ThinkPHP后�
 ├── API.md: API接口文档
 ├── DATABASE.md: 数据库设计文档
 ├── DEPLOYMENT.md: 部署指南
-├── IMPLEMENTATION_REPORT.md: Phase 7实现报告
+├── QUICK_START.md: 5分钟快速开始指南
+├── ERROR_HANDLING.md: 错误处理文档
+├── CHANGELOG.md: 完整更新日志
 ├── PROJECT_SUMMARY.md: 项目总结
 ├── Android README.md: Android开发文档
 ├── iOS README.md: iOS开发文档
-└── 总行数: 5,000+
+└── 总行数: 6,500+
 ```
 
-**总计**：120+ 文件，28,300+ 行代码
+**总计**：138+ 文件，31,900+ 行代码
 
 ---
 
@@ -632,7 +634,7 @@ MIT License
 ## 联系方式
 
 - **项目**: Running App
-- **版本**: v1.5.0
+- **版本**: v1.5.2
 - **最后更新**: 2025-11-17
 - **开发团队**: Running App Team
 

@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.1-blue)
+![Version](https://img.shields.io/badge/version-1.5.2-blue)
 ![Backend](https://img.shields.io/badge/backend-100%25-brightgreen)
 ![Android](https://img.shields.io/badge/android-100%25-brightgreen)
 ![iOS](https://img.shields.io/badge/iOS-100%25-brightgreen)
@@ -33,8 +33,8 @@ Running App是一个企业级的全栈跑步应用系统，支持GPS跑步跟踪
 | 模块 | 完成度 | 状态 |
 |------|--------|------|
 | 后端 (ThinkPHP) | 100% | ✅ 生产可用 |
-| Android (Kotlin) | 99% | ✅ 生产可用 |
-| iOS (Swift) | 99% | ✅ 生产可用 |
+| Android (Kotlin) | 100% | ✅ 生产可用 |
+| iOS (Swift) | 100% | ✅ 生产可用 |
 
 ---
 
@@ -192,29 +192,30 @@ open RunningApp.xcworkspace
 ## 📊 代码统计
 
 ```
-总文件数：132+
-总代码行数：29,700+
+总文件数：138+
+总代码行数：31,900+
 
 后端：
 - 控制器：15个
 - 模型：20个
+- 服务类：3个 (Achievement/Challenge/Notification)
 - API接口：74个
 - 数据表：30个
-- 代码：12,100+行
+- 代码：12,900+行
 
 Android：
 - Repository：8个
 - ViewModel：8个
 - UI Screen：6个
-- 工具类：5个
-- 代码：9,000+行
+- 工具类：11个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils等)
+- 代码：10,010+行
 
 iOS：
 - Model：10个
 - ViewModel：5个
 - View：8个
-- 工具类：4个
-- 代码：4,200+行
+- 工具类：10个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils等)
+- 代码：5,400+行
 ```
 
 ---
@@ -320,8 +321,8 @@ await loginViewModel.login()
 ## 📞 联系方式
 
 - **项目名称**: Running App
-- **当前版本**: v1.4.0
-- **最后更新**: 2025-11-15
+- **当前版本**: v1.5.2
+- **最后更新**: 2025-11-17
 
 ---
 

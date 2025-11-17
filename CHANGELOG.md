@@ -1,5 +1,136 @@
 # 更新日志 (Changelog)
 
+## [v1.5.2] - 2025-11-17
+
+### 新增功能 🎉
+
+#### 缓存管理工具
+- **Android CacheManager** (280行)
+  - 缓存大小监控和格式化显示
+  - 按目录管理缓存文件
+  - 过期缓存自动清理（默认7天）
+  - 图片缓存、API缓存分离管理
+  - 缓存键生成工具（CacheKeyGenerator）
+  - 支持Kotlin Coroutines异步操作
+
+- **iOS CacheManager** (350行)
+  - 文件缓存管理
+  - 内存缓存实现（基于NSCache）
+  - URL缓存清理
+  - 缓存策略枚举（memory/disk/both/none）
+  - 过期缓存自动清理
+  - 缓存大小监控和格式化
+
+#### 图片压缩工具
+- **Android ImageCompressor** (330行)
+  - 质量压缩（可配置压缩质量）
+  - 尺寸压缩（自动调整到目标大小）
+  - EXIF信息处理（旋转修正、数据保留）
+  - 批量压缩支持
+  - 支持URI和文件路径
+  - 完整的配置选项（CompressConfig）
+
+- **iOS ImageCompressor** (400行)
+  - UIImage压缩和优化
+  - PHAsset加载和压缩
+  - 批量图片压缩
+  - 丰富的UIImage扩展：
+    - resize/scaleToFit - 图片缩放
+    - cropToSquare - 裁剪为正方形
+    - rotate - 旋转图片
+    - fixOrientation - 修正图片方向
+  - 支持async/await异步操作
+
+#### 数据格式化工具
+- **Android FormatUtils** (400行)
+  - 日期时间格式化：
+    - 8种预定义格式
+    - 相对时间显示（刚刚、5分钟前、昨天等）
+    - 时间戳转换
+  - 运动数据格式化：
+    - 距离（米/公里自动转换）
+    - 配速（分/公里显示，如5'30"/km）
+    - 时长（3种格式：完整、简短、紧凑）
+    - 速度（米/秒转公里/小时）
+  - 通用数据格式化：
+    - 数字（千位分隔符）
+    - 卡路里、步数、心率、海拔
+    - 百分比、文件大小
+  - 丰富的扩展函数（toDistanceString、toDurationString等）
+
+- **iOS FormatUtils** (450行)
+  - 完整的日期时间格式化
+  - 运动数据格式化（同Android）
+  - 静态便捷方法（FormatUtils.distance()等）
+  - 类型扩展（Double、Int、Int64、Date）
+  - 中文本地化支持
+
+### 技术特性 🔧
+
+#### 架构设计
+- 单例模式确保全局唯一实例
+- 依赖注入支持（Android Hilt）
+- 异步操作友好（Coroutines/async-await）
+- 类型安全的扩展函数
+
+#### 性能优化
+- 内存缓存+磁盘缓存双层架构
+- 图片压缩算法优化
+- 格式化结果缓存机制
+- 异步文件操作避免阻塞主线程
+
+#### 代码质量
+- 完整的错误处理
+- 详细的文档注释
+- 统一的命名规范
+- 可配置的参数选项
+
+### 代码统计 📊
+
+- **新增文件**: 6个
+- **新增代码**: 2,191行
+- **Android工具类**: 1,010行
+- **iOS工具类**: 1,200行
+- **功能覆盖**: 缓存管理、图片处理、数据格式化
+
+### 使用示例 💡
+
+#### 缓存管理
+```kotlin
+// Android
+val size = cacheManager.getCacheSize()
+cacheManager.clearExpiredCache(days = 7)
+
+// iOS
+let formattedSize = await cacheManager.getFormattedCacheSize()
+await cacheManager.clearAllCache()
+```
+
+#### 图片压缩
+```kotlin
+// Android
+val config = ImageCompressor.CompressConfig(maxWidth = 1080, quality = 85)
+val compressed = imageCompressor.compress(uri, config)
+
+// iOS
+let data = await imageCompressor.compress(image: uiImage, config: config)
+```
+
+#### 数据格式化
+```kotlin
+// Android
+5000f.toDistanceString() // "5.00 km"
+3665.toDurationString() // "1:01:05"
+timestamp.toRelativeTimeString() // "5分钟前"
+
+// iOS
+distance.toDistanceString() // "5.00 km"
+duration.toDurationString() // "1:01:05"
+date.toRelativeTimeString() // "5分钟前"
+```
+
+---
+
 ## [v1.5.1] - 2025-11-17
 
 ### 新增功能 🎉
