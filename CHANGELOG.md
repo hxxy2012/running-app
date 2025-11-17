@@ -1,5 +1,83 @@
 # 更新日志 (Changelog)
 
+## [v1.5.5] - 2025-11-17
+
+### 新增功能 🎉
+
+#### 数据备份和恢复工具
+- **Android BackupHelper** (310行)
+  - 完整数据备份（ZIP格式压缩）
+  - 数据导出（CSV/JSON格式）
+  - 备份文件管理和列表
+  - 自动清理旧备份
+  - 备份信息查询
+  - 快速备份/恢复接口
+
+- **iOS BackupHelper** (280行)
+  - 完整数据备份（JSON格式）
+  - 偏好设置备份
+  - 数据导出（CSV/JSON）
+  - 备份文件管理
+  - 备份元数据（设备信息、版本等）
+  - 快速备份/恢复接口
+
+#### 性能监控工具
+- **Android PerformanceMonitor** (280行)
+  - 内存使用监控（已用/可用/总内存）
+  - CPU使用率监控
+  - 网络性能监控（请求延迟、成功率）
+  - 启动时间追踪
+  - 性能测量工具（同步/异步）
+  - 性能报告生成
+
+- **iOS PerformanceMonitor** (270行)
+  - 内存使用监控（MB级精度）
+  - CPU使用率监控
+  - FPS监控（60fps实时监测）
+  - 网络性能监控
+  - 启动时间追踪
+  - 性能测量工具（同步/异步）
+  - 性能报告生成
+
+### 代码统计 📊
+
+- **新增文件**: 4个
+- **新增代码**: 1,343行
+
+### 使用示例
+
+#### 数据备份
+```kotlin
+// Android
+val result = BackupHelper.backupAllData()
+result.onSuccess { backupFile ->
+    println("备份成功: ${backupFile.path}")
+}
+
+// iOS
+let result = await BackupHelper.shared.backupAllData()
+switch result {
+case .success(let url):
+    print("备份成功: \(url.path)")
+case .failure(let error):
+    print("备份失败: \(error)")
+}
+```
+
+#### 性能监控
+```kotlin
+// Android
+PerformanceMonitor.startMonitoring()
+val metrics = PerformanceMonitor.getCurrentMetrics()
+println("内存使用: ${metrics.memoryUsage}MB")
+
+// iOS
+PerformanceMonitor.shared.startMonitoring()
+print("CPU使用率: \(PerformanceMonitor.shared.cpuUsage)%")
+```
+
+---
+
 ## [v1.5.4] - 2025-11-17
 
 ### 新增功能 🎉
