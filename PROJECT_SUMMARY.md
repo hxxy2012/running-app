@@ -146,9 +146,9 @@ Running App 是一个**完整的全栈跑步应用系统**，包含ThinkPHP后�
 ├── ViewModel: 8个 (Login, Running, History, Social, Profile, Training, Challenge, Ranking)
 ├── UI Screen: 6个 (LoginScreen, RegisterScreen, RunningScreen, HistoryScreen, SocialScreen, ProfileScreen)
 ├── Service: 1个 (LocationTrackingService)
-├── 工具类: 23个 (ErrorHandler, Logger, NetworkMonitor, CacheManager, ImageCompressor, FormatUtils, PermissionHelper, BiometricHelper, ShareHelper, NotificationHelper, HapticHelper, TTSHelper, DeviceHelper, BackupHelper, PerformanceMonitor, CrashHandler, ThemeManager, KeyboardManager等)
+├── 工具类: 25个 (ErrorHandler, Logger, NetworkMonitor, CacheManager, ImageCompressor, FormatUtils, PermissionHelper, BiometricHelper, ShareHelper, NotificationHelper, HapticHelper, TTSHelper, DeviceHelper, BackupHelper, PerformanceMonitor, CrashHandler, ThemeManager, KeyboardManager, AnimationHelper, ValidationHelper等)
 ├── Hilt模块: 2个
-└── 代码行数: 13,100+
+└── 代码行数: 13,950+
 ```
 
 ### iOS客户端（Swift）
@@ -157,8 +157,8 @@ Running App 是一个**完整的全栈跑步应用系统**，包含ThinkPHP后�
 ├── Service: 2个 (NetworkService, LocationTrackingService)
 ├── ViewModel: 5个 (Login, Running, History, Social, Profile)
 ├── View: 8个 (ContentView, RunningView, HistoryListView, SocialFeedView, ProfileTabView等)
-├── 工具类: 22个 (ErrorHandler, Logger, NetworkMonitor, CacheManager, ImageCompressor, FormatUtils, PermissionHelper, BiometricHelper, ShareHelper, NotificationHelper, HapticHelper, TTSHelper, DeviceHelper, BackupHelper, PerformanceMonitor, CrashHandler, ThemeManager, KeyboardManager等)
-└── 代码行数: 9,200+
+├── 工具类: 24个 (ErrorHandler, Logger, NetworkMonitor, CacheManager, ImageCompressor, FormatUtils, PermissionHelper, BiometricHelper, ShareHelper, NotificationHelper, HapticHelper, TTSHelper, DeviceHelper, BackupHelper, PerformanceMonitor, CrashHandler, ThemeManager, KeyboardManager, AnimationHelper, ValidationHelper等)
+└── 代码行数: 10,100+
 ```
 
 ### 文档
@@ -175,7 +175,7 @@ Running App 是一个**完整的全栈跑步应用系统**，包含ThinkPHP后�
 └── 总行数: 6,500+
 ```
 
-**总计**：162+ 文件，40,000+ 行代码
+**总计**：166+ 文件，42,000+ 行代码
 
 ---
 

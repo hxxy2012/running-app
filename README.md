@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.5.6-blue)
+![Version](https://img.shields.io/badge/version-1.5.7-blue)
 ![Backend](https://img.shields.io/badge/backend-100%25-brightgreen)
 ![Android](https://img.shields.io/badge/android-100%25-brightgreen)
 ![iOS](https://img.shields.io/badge/iOS-100%25-brightgreen)
@@ -192,8 +192,8 @@ open RunningApp.xcworkspace
 ## 📊 代码统计
 
 ```
-总文件数：162+
-总代码行数：40,000+
+总文件数：166+
+总代码行数：42,000+
 
 后端：
 - 控制器：15个
@@ -207,15 +207,15 @@ Android：
 - Repository：8个
 - ViewModel：8个
 - UI Screen：6个
-- 工具类：23个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils/PermissionHelper/BiometricHelper/ShareHelper/NotificationHelper/HapticHelper/TTSHelper/DeviceHelper/BackupHelper/PerformanceMonitor/CrashHandler/ThemeManager/KeyboardManager等)
-- 代码：13,100+行
+- 工具类：25个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils/PermissionHelper/BiometricHelper/ShareHelper/NotificationHelper/HapticHelper/TTSHelper/DeviceHelper/BackupHelper/PerformanceMonitor/CrashHandler/ThemeManager/KeyboardManager/AnimationHelper/ValidationHelper等)
+- 代码：13,950+行
 
 iOS：
 - Model：10个
 - ViewModel：5个
 - View：8个
-- 工具类：22个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils/PermissionHelper/BiometricHelper/ShareHelper/NotificationHelper/HapticHelper/TTSHelper/DeviceHelper/BackupHelper/PerformanceMonitor/CrashHandler/ThemeManager/KeyboardManager等)
-- 代码：9,200+行
+- 工具类：24个 (ErrorHandler/Logger/NetworkMonitor/CacheManager/ImageCompressor/FormatUtils/PermissionHelper/BiometricHelper/ShareHelper/NotificationHelper/HapticHelper/TTSHelper/DeviceHelper/BackupHelper/PerformanceMonitor/CrashHandler/ThemeManager/KeyboardManager/AnimationHelper/ValidationHelper等)
+- 代码：10,100+行
 ```
 
 ---
@@ -321,7 +321,7 @@ await loginViewModel.login()
 ## 📞 联系方式
 
 - **项目名称**: Running App
-- **当前版本**: v1.5.6
+- **当前版本**: v1.5.7
 - **最后更新**: 2025-11-17
 
 ---

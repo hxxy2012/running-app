@@ -1,5 +1,100 @@
 # 更新日志 (Changelog)
 
+## [v1.5.7] - 2025-11-17
+
+### 新增功能 🎉
+
+#### 动画工具
+- **Android AnimationHelper** (420行)
+  - View基础动画（淡入淡出/缩放/滑动）
+  - 高级动画效果（弹跳/摇晃/旋转/脉冲）
+  - Jetpack Compose动画支持
+  - 自定义动画修饰符
+  - 无限循环动画
+  - 弹簧和补间动画规格
+  - View扩展函数
+
+- **iOS AnimationHelper** (450行)
+  - UIView动画完整支持
+  - 弹跳和摇晃效果
+  - SwiftUI动画修饰符
+  - 自定义过渡效果
+  - 预定义动画（quick/standard/bouncy）
+  - 运动动画效果
+  - UIView扩展
+
+#### 数据验证工具
+- **Android ValidationHelper** (430行)
+  - 手机号/邮箱/密码验证
+  - 身份证号验证（含校验码）
+  - 银行卡号验证（Luhn算法）
+  - 用户名/真实姓名验证
+  - URL/数字/中文验证
+  - 密码强度检测
+  - 验证码验证
+  - 表单综合验证（登录/注册）
+  - 字符串扩展验证
+
+- **iOS ValidationHelper** (440行)
+  - 完整的验证规则集
+  - 正则表达式验证
+  - 身份证校验算法
+  - 银行卡Luhn验证
+  - 密码强度分级
+  - 表单验证结果封装
+  - String扩展验证方法
+
+### 代码统计 📊
+
+- **新增文件**: 4个
+- **新增代码**: 1,872行
+
+### 使用示例
+
+#### 动画工具
+```kotlin
+// Android View动画
+view.fadeIn()
+view.bounce()
+AnimationHelper().shake(view)
+
+// Android Compose
+Modifier.pulse(enabled = true)
+Modifier.blink(enabled = true)
+
+// iOS UIView
+view.fadeIn()
+view.shake()
+AnimationHelper.shared.rotate(view, repeat: true)
+
+// iOS SwiftUI
+Text("Hello")
+    .pulse(enabled: true)
+    .transition(.scaleAndFade)
+```
+
+#### 数据验证
+```kotlin
+// Android
+val result = validationHelper.validateLoginForm(phone, password)
+if (result.isValid) {
+    // 验证通过
+} else {
+    // 显示错误: result.getError("phone")
+}
+
+// iOS
+let result = ValidationHelper.shared.validateLoginForm(
+    phone: phone,
+    password: password
+)
+if result.isValid {
+    // 验证通过
+}
+```
+
+---
+
 ## [v1.5.6] - 2025-11-17
 
 ### 新增功能 🎉
