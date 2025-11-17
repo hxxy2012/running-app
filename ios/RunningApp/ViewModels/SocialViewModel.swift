@@ -42,7 +42,7 @@ class SocialViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -75,7 +75,7 @@ class SocialViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -180,7 +180,7 @@ class SocialViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                 }
             }
         }

@@ -6,6 +6,7 @@ import com.runningapp.data.remote.model.TrainingPlan
 import com.runningapp.data.remote.model.UserTrainingPlan
 import com.runningapp.data.repository.TrainingRepository
 import com.runningapp.utils.Result
+import com.runningapp.utils.toErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -47,7 +48,7 @@ class TrainingViewModel @Inject constructor(
                     _uiState.value = UiState.Idle
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "加载失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -83,7 +84,7 @@ class TrainingViewModel @Inject constructor(
                     _uiState.value = UiState.Joined
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "加入失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -101,7 +102,7 @@ class TrainingViewModel @Inject constructor(
                     _uiState.value = UiState.DayCompleted
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "完成失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -120,7 +121,7 @@ class TrainingViewModel @Inject constructor(
                     _uiState.value = UiState.Abandoned
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "操作失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }

@@ -33,7 +33,7 @@ class ProfileViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -58,7 +58,7 @@ class ProfileViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -90,7 +90,7 @@ class ProfileViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -118,7 +118,7 @@ class ProfileViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }

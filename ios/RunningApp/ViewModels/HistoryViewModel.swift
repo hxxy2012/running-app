@@ -40,7 +40,7 @@ class HistoryViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -81,7 +81,7 @@ class HistoryViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                 }
             }
         }

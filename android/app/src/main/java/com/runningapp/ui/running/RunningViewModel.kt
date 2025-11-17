@@ -15,6 +15,7 @@ import com.runningapp.service.LocationTrackingService
 import com.runningapp.utils.LocationUtils
 import com.runningapp.utils.PreferenceManager
 import com.runningapp.utils.Result
+import com.runningapp.utils.toErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.*
@@ -102,7 +103,7 @@ class RunningViewModel @Inject constructor(
                     _uiState.value = UiState.Idle
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "启动失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -196,7 +197,7 @@ class RunningViewModel @Inject constructor(
                     _uiState.value = UiState.Finished(record)
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "保存失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }

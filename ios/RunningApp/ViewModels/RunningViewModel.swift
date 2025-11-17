@@ -41,7 +41,7 @@ class RunningViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -95,7 +95,7 @@ class RunningViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }

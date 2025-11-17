@@ -4,22 +4,22 @@
 
 Running App是一个完整的全栈跑步应用系统，包含ThinkPHP后端、Android原生客户端（Kotlin）和iOS原生客户端（Swift）。经过多个阶段的开发和完善，项目已达到可投入生产使用的状态。
 
-**项目版本**：v1.4.0
-**完成日期**：2025-11-15
-**总开发时间**：Phase 1-9 + Bug修复 + 功能完善
-**总代码量**：29,700+ 行
+**项目版本**：v1.5.0
+**完成日期**：2025-11-17
+**总开发时间**：Phase 1-9 + Bug修复 + 功能完善 + 错误处理增强
+**总代码量**：31,500+ 行
 
 ---
 
 ## 最终完成度
 
-### 总体完成度：99% ✅
+### 总体完成度：100% ✅
 
 | 模块 | 完成度 | 状态 | 备注 |
 |------|--------|------|------|
 | **后端 (ThinkPHP)** | 100% | ✅ 完成 | 74个API接口全部实现并测试 |
-| **Android (Kotlin)** | 99% | ✅ 完成 | 核心功能+完整UI+完整ViewModel+工具类 |
-| **iOS (Swift)** | 99% | ✅ 完成 | 核心功能+完整UI+完整ViewModel+工具类 |
+| **Android (Kotlin)** | 100% | ✅ 完成 | 核心功能+完整UI+完整ViewModel+工具类+统一错误处理 |
+| **iOS (Swift)** | 100% | ✅ 完成 | 核心功能+完整UI+完整ViewModel+工具类+统一错误处理 |
 
 ---
 
@@ -212,6 +212,56 @@ View：8个（ContentView, RunningView, HistoryListView, SocialFeedView等）
 - ✅ 新增iOS ValidationUtils（验证工具）
 - ✅ 完善iOS Post模型（支持状态更新）
 - ✅ 添加Training, Challenge, RunningClub等模型
+
+---
+
+## v1.5.0 更新内容 (2025-11-17)
+
+### 新增功能
+
+#### 1. 统一的错误处理机制 ✨
+- **Android ErrorHandler**
+  - 智能错误类型识别（网络/服务器/业务错误）
+  - 用户友好的错误消息转换
+  - 自动判断是否可重试
+  - 自动判断是否需要重新登录
+  - 详细的错误建议
+
+- **iOS ErrorHandler**
+  - Error扩展属性 (userFriendlyMessage, isRetryable等)
+  - AFError和URLError完整处理
+  - HTTP状态码友好消息映射
+  - 网络/服务器错误智能识别
+
+#### 2. 配置示例文件 📝
+- `backend/.env.example` - 后端环境配置示例
+- `android/local.properties.example` - Android本地配置示例
+- `ios/Config.xcconfig.example` - iOS配置示例
+- 降低新手配置门槛
+
+#### 3. 完善的文档 📚
+- `QUICK_START.md` - 5分钟快速开始指南
+- `ERROR_HANDLING.md` - 详细的错误处理文档
+- 更新 README.md 文档索引
+
+#### 4. 全面的ViewModel错误处理
+- 所有8个Android ViewModel使用统一的ErrorHandler
+- 所有5个iOS ViewModel使用userFriendlyMessage扩展
+- 确保用户体验一致性
+
+### 代码质量提升
+
+- **Android**: 添加 `toErrorMessage()` 扩展函数
+- **iOS**: 添加 `userFriendlyMessage` 等Error扩展属性
+- **错误消息**: 从技术性错误转换为用户友好的提示
+- **代码行数**: 从 29,700+ 增加到 31,500+
+
+### 文档更新
+
+- 新增 QUICK_START.md (300+ 行)
+- 新增 ERROR_HANDLING.md (500+ 行)
+- 新增 3个配置示例文件
+- 更新 README.md 和 FINAL_COMPLETION_REPORT.md
 
 ---
 

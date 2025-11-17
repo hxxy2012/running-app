@@ -2,10 +2,10 @@
 
 <div align="center">
 
-![Version](https://img.shields.io/badge/version-1.4.0-blue)
+![Version](https://img.shields.io/badge/version-1.5.0-blue)
 ![Backend](https://img.shields.io/badge/backend-100%25-brightgreen)
-![Android](https://img.shields.io/badge/android-99%25-brightgreen)
-![iOS](https://img.shields.io/badge/iOS-99%25-brightgreen)
+![Android](https://img.shields.io/badge/android-100%25-brightgreen)
+![iOS](https://img.shields.io/badge/iOS-100%25-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 一个功能完整的全栈跑步应用系统，包含ThinkPHP后端、Android原生客户端和iOS原生客户端

@@ -7,6 +7,7 @@ import com.runningapp.data.remote.model.User
 import com.runningapp.data.repository.UserRepository
 import com.runningapp.utils.PreferenceManager
 import com.runningapp.utils.Result
+import com.runningapp.utils.toErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -50,7 +51,7 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = UiState.Idle
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "加载失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -68,7 +69,7 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = UiState.Updated
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "更新失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -86,7 +87,7 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = UiState.AvatarUploaded(result.data)
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "上传失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -104,7 +105,7 @@ class ProfileViewModel @Inject constructor(
                     _uiState.value = UiState.PasswordChanged
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "修改失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
