@@ -1,5 +1,114 @@
 # 更新日志 (Changelog)
 
+## [v1.5.6] - 2025-11-17
+
+### 新增功能 🎉
+
+#### 崩溃处理工具
+- **Android CrashHandler** (260行)
+  - 捕获未捕获的异常和信号
+  - 收集完整的崩溃信息（堆栈、设备、应用信息）
+  - 保存崩溃报告到本地文件
+  - 崩溃报告管理（查看、删除、清理旧报告）
+  - 支持异步上传崩溃报告到服务器
+  - Hilt依赖注入集成
+
+- **iOS CrashHandler** (330行)
+  - NSException捕获处理
+  - 信号处理（SIGABRT/SIGILL/SIGSEGV等）
+  - 完整的崩溃信息收集
+  - 崩溃报告本地存储
+  - 报告管理和查询
+  - 手动错误记录功能
+
+#### 主题管理工具
+- **Android ThemeManager** (320行)
+  - 支持浅色/深色/跟随系统三种主题模式
+  - Material Design 3颜色方案
+  - 动态颜色支持（Android 12+）
+  - 自定义浅色和深色配色方案
+  - Jetpack Compose集成
+  - 主题持久化存储
+  - StateFlow响应式主题切换
+
+- **iOS ThemeManager** (380行)
+  - 浅色/深色/跟随系统主题模式
+  - 5种内置配色主题（蓝/绿/橙/紫/红）
+  - SwiftUI ObservableObject集成
+  - 完整的颜色系统（主色/次要色/背景/文本等）
+  - 运动数据专用配色
+  - 主题持久化
+  - SwiftUI修饰符支持
+
+#### 键盘管理工具
+- **Android KeyboardManager** (280行)
+  - 显示/隐藏软键盘
+  - WindowInsets键盘监听（Android 11+）
+  - 兼容模式键盘监听
+  - 键盘高度实时获取
+  - StateFlow响应式状态
+  - Jetpack Compose支持
+  - View扩展函数
+  - 键盘可见性监听器
+
+- **iOS KeyboardManager** (340行)
+  - 键盘显示/隐藏控制
+  - 完整的键盘通知处理
+  - 键盘高度和frame监听
+  - SwiftUI修饰符（自适应/避让/点击隐藏）
+  - Combine Publisher支持
+  - UITextField工具栏扩展
+  - 键盘动画信息获取
+
+### 代码统计 📊
+
+- **新增文件**: 6个
+- **新增代码**: 1,964行
+
+### 使用示例
+
+#### 崩溃处理
+```kotlin
+// Android - 在Application中初始化
+class MyApp : Application() {
+    @Inject lateinit var crashHandler: CrashHandler
+
+    override fun onCreate() {
+        super.onCreate()
+        crashHandler.init()
+    }
+}
+
+// iOS - 在AppDelegate中初始化
+func application(_ application: UIApplication, didFinishLaunchingWithOptions...) {
+    CrashHandler.shared.initialize()
+}
+```
+
+#### 主题管理
+```kotlin
+// Android
+themeManager.setThemeMode(ThemeMode.DARK)
+themeManager.setUseDynamicColor(true)
+
+// iOS
+ThemeManager.shared.setDarkTheme()
+ThemeManager.shared.setColorTheme(.blue)
+```
+
+#### 键盘管理
+```kotlin
+// Android Compose
+val isKeyboardVisible by keyboardManager.isKeyboardVisible.collectAsState()
+
+// iOS SwiftUI
+TextField("输入", text: $text)
+    .keyboardAdaptive()
+    .hideKeyboardOnTap()
+```
+
+---
+
 ## [v1.5.5] - 2025-11-17
 
 ### 新增功能 🎉
