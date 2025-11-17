@@ -42,6 +42,7 @@ ios/*.ipa
 ios/*.dSYM.zip
 ios/*.dSYM
 ios/Podfile.lock
+ios/Config.xcconfig
 
 # ========== 文档 ==========
 docs/.vscode/

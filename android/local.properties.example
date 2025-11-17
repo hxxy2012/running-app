@@ -1,0 +1,33 @@
+# Android本地配置示例
+# 复制此文件为 local.properties 并根据实际情况修改
+
+## SDK路径配置（必需）
+# Android SDK路径，根据实际安装路径修改
+# Windows示例: sdk.dir=C\:\\Users\\YourName\\AppData\\Local\\Android\\Sdk
+# Mac/Linux示例: sdk.dir=/Users/YourName/Library/Android/sdk
+sdk.dir=/path/to/your/android/sdk
+
+## API配置（必需）
+# 后端API地址
+# 开发环境示例
+api.base.url=http://192.168.1.100:8000
+# 生产环境示例
+# api.base.url=https://api.runningapp.com
+
+## Google Maps API Key（可选，用于地图功能）
+# 申请地址: https://console.cloud.google.com/google/maps-apis/
+# google.maps.api.key=your_google_maps_api_key_here
+
+## 高德地图 API Key（可选，国内推荐使用）
+# 申请地址: https://console.amap.com/dev/key/app
+# amap.api.key=your_amap_api_key_here
+
+## 微信开放平台配置（可选，用于微信登录）
+# wechat.app.id=your_wechat_app_id
+
+## QQ开放平台配置（可选，用于QQ登录）
+# qq.app.id=your_qq_app_id
+
+## 极光推送配置（可选，用于消息推送）
+# jpush.app.key=your_jpush_app_key
+# jpush.app.secret=your_jpush_app_secret

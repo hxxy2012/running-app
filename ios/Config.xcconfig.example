@@ -1,0 +1,46 @@
+// iOS配置示例
+// 复制此文件为 Config.xcconfig 并根据实际情况修改
+// 注意：修改后需要在 Xcode 项目设置中引用此配置文件
+
+// API配置
+// 后端API地址
+// 开发环境示例
+API_BASE_URL = http:/$()/192.168.1.100:8000
+// 生产环境示例
+// API_BASE_URL = https:/$()/api.runningapp.com
+
+// Apple Maps配置（已内置，无需额外配置）
+// 如需使用其他地图SDK，请按以下示例配置
+
+// 高德地图 API Key（可选，国内推荐使用）
+// 申请地址: https://console.amap.com/dev/key/app
+// AMAP_API_KEY = your_amap_api_key_here
+
+// 微信开放平台配置（可选，用于微信登录）
+// 申请地址: https://open.weixin.qq.com
+// WECHAT_APP_ID = your_wechat_app_id
+// WECHAT_APP_SECRET = your_wechat_app_secret
+// WECHAT_UNIVERSAL_LINK = https:/$()/your-domain.com/wechat/
+
+// Apple Sign In（已内置，需在 Xcode Capabilities 中启用）
+// 1. 在项目设置中选择 "Signing & Capabilities"
+// 2. 点击 "+ Capability" 添加 "Sign in with Apple"
+
+// 极光推送配置（可选，用于消息推送）
+// 申请地址: https://www.jiguang.cn
+// JPUSH_APP_KEY = your_jpush_app_key
+
+// 友盟统计配置（可选，用于数据统计）
+// UMENG_APP_KEY = your_umeng_app_key
+
+// Bundle Identifier（必需，修改为你的应用ID）
+PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.runningapp
+
+// App版本号
+MARKETING_VERSION = 1.4.0
+
+// Build号
+CURRENT_PROJECT_VERSION = 1
+
+// 最低支持iOS版本
+IPHONEOS_DEPLOYMENT_TARGET = 15.0

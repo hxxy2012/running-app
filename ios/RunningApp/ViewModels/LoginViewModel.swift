@@ -47,7 +47,7 @@ class LoginViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }
@@ -78,7 +78,7 @@ class LoginViewModel: ObservableObject {
                 }
             } catch {
                 await MainActor.run {
-                    errorMessage = error.localizedDescription
+                    errorMessage = error.userFriendlyMessage
                     isLoading = false
                 }
             }

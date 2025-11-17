@@ -6,6 +6,7 @@ import com.runningapp.data.remote.model.LoginResponse
 import com.runningapp.data.repository.AuthRepository
 import com.runningapp.utils.PreferenceManager
 import com.runningapp.utils.Result
+import com.runningapp.utils.toErrorMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,7 +37,7 @@ class LoginViewModel @Inject constructor(
                     _uiState.value = UiState.CodeSent
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "发送失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -55,7 +56,7 @@ class LoginViewModel @Inject constructor(
                     _uiState.value = UiState.Success(result.data)
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "登录失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -74,7 +75,7 @@ class LoginViewModel @Inject constructor(
                     _uiState.value = UiState.Success(result.data)
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "登录失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
@@ -93,7 +94,7 @@ class LoginViewModel @Inject constructor(
                     _uiState.value = UiState.Success(result.data)
                 }
                 is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "注册失败")
+                    _uiState.value = UiState.Error(result.exception.toErrorMessage())
                 }
                 else -> {}
             }
