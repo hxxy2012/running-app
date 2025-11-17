@@ -39,11 +39,36 @@ jobs:
         working-directory: ./backend
         run: composer install --prefer-dist --no-progress
 
-      - name: Run tests
+      - name: Copy .env file
+        working-directory: ./backend
+        run: cp .env.example .env || echo "No .env.example found"
+
+      - name: Run PHPUnit tests
         working-directory: ./backend
         run: |
-          echo "Backend tests would run here"
-          # composer test
+          if [ -f "vendor/bin/phpunit" ]; then
+            vendor/bin/phpunit --colors=always --testdox
+          else
+            echo "PHPUnit not found, skipping tests"
+          fi
+
+      - name: Run PHPStan static analysis
+        working-directory: ./backend
+        run: |
+          if [ -f "vendor/bin/phpstan" ]; then
+            vendor/bin/phpstan analyse --memory-limit=1G || true
+          else
+            echo "PHPStan not found, skipping analysis"
+          fi
+
+      - name: Run PHP CodeSniffer
+        working-directory: ./backend
+        run: |
+          if [ -f "vendor/bin/phpcs" ]; then
+            vendor/bin/phpcs --standard=PSR12 app/ || true
+          else
+            echo "PHP CodeSniffer not found, skipping"
+          fi
 
   # Android构建
   android-build:

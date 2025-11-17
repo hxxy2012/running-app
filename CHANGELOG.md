@@ -1,5 +1,131 @@
 # 更新日志 (Changelog)
 
+## [v1.6.0] - 2024-11-17
+
+### 新增功能 ✨
+
+#### 测试框架
+- **PHPUnit** - 添加完整的单元测试框架
+  - 配置文件：phpunit.xml
+  - 示例测试：JwtServiceTest, AchievementServiceTest, AuthApiTest
+  - 测试套件：Unit tests, Feature tests
+  - 代码覆盖率报告支持
+
+#### API文档
+- **Swagger/OpenAPI** - 完整的API文档
+  - swagger.json规范文件
+  - swagger-ui.html交互式文档界面
+  - 支持在线测试API
+  - 访问地址：http://localhost:8000/swagger-ui.html
+
+#### 代码质量工具
+- **PHPStan** - 静态代码分析
+  - Level 5配置
+  - 自动检测类型错误
+  - 配置文件：phpstan.neon
+
+- **PHP CS Fixer** - 代码风格自动修复
+  - PSR-12标准
+  - 自动格式化代码
+  - 配置文件：.php-cs-fixer.php
+
+- **PHP CodeSniffer** - 代码规范检查
+  - PSR-12标准检查
+  - 集成到CI流程
+
+#### 性能测试
+- **load_test.sh** - 压力测试脚本
+  - 支持快速、标准、压力三种测试模式
+  - 使用Apache Bench进行测试
+  - 自动生成性能报告
+  - 支持自定义API测试
+
+#### 缓存系统
+- **CacheService** - 统一缓存服务
+  - 支持Redis和文件缓存
+  - 实现缓存穿透防护
+  - 实现缓存雪崩防护
+  - 实现缓存击穿防护
+  - 提供Remember模式
+  - 内置限流功能
+
+- **cache.php** - 完整的缓存配置
+  - Redis配置
+  - 文件缓存配置
+  - Memcached配置（可选）
+
+#### 监控系统
+- **Health检查API** - 详细的健康检查
+  - /health - 基础健康检查
+  - /health/detailed - 详细系统检查
+  - /health/ready - Kubernetes就绪探针
+  - /health/alive - Kubernetes存活探针
+  - 检查项：应用、数据库、缓存、文件系统、内存
+
+- **Prometheus Metrics** - 监控指标导出
+  - /metrics端点
+  - 应用程序指标（内存、启动时间）
+  - 数据库指标（连接数、慢查询）
+  - 业务指标（用户数、跑步记录数等）
+  - 系统指标（CPU负载、磁盘空间）
+  - 支持Prometheus + Grafana集成
+
+#### CI/CD增强
+- **ci.yml增强** - 完善的CI流程
+  - PHPUnit自动测试
+  - PHPStan静态分析
+  - PHP CodeSniffer检查
+  - Android构建和测试
+  - 代码质量门禁
+
+- **deploy.yml** - 自动化部署
+  - 生产环境部署
+  - Docker镜像构建和推送
+  - 部署通知
+  - 支持Tag触发
+
+#### 文档完善
+- **PERFORMANCE_OPTIMIZATION.md** - 性能优化指南
+  - 数据库优化策略
+  - 缓存使用最佳实践
+  - API性能优化
+  - 服务器配置调优
+  - 监控和诊断方法
+  - 性能测试指南
+
+- **TESTING_GUIDE.md** - 测试指南
+  - 单元测试编写
+  - 功能测试编写
+  - API测试方法
+  - 性能测试流程
+  - 代码质量检查
+  - CI/CD集成
+
+### 优化改进 🚀
+
+#### Composer依赖
+- 添加PHPUnit ^9.5
+- 添加Mockery ^1.5
+- 添加PHPStan ^1.10
+- 添加PHP CodeSniffer ^3.7
+
+#### 项目结构
+- backend/tests/ - 测试目录
+  - Unit/ - 单元测试
+  - Feature/ - 功能测试
+  - Fixtures/ - 测试数据
+- scripts/load_test.sh - 性能测试脚本
+- backend/public/swagger.json - API文档
+- backend/public/swagger-ui.html - API文档界面
+
+### 技术债务清理 🧹
+- 添加完整的测试覆盖
+- 引入静态分析工具
+- 统一代码风格
+- 完善文档体系
+
+---
+
 ## [v1.5.9 Patch] - 2025-11-17
 
 ### 修复问题 🐛

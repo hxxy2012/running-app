@@ -271,6 +271,8 @@ open RunningApp.xcworkspace
 | [QUICK_START.md](QUICK_START.md) | ⭐ 快速开始指南（5分钟） |
 | [SCRIPTS_GUIDE.md](SCRIPTS_GUIDE.md) | ⭐⭐ 脚本使用指南（必读） |
 | [OPERATIONS_GUIDE.md](OPERATIONS_GUIDE.md) | ⭐⭐⭐ 运维监控指南（生产必读） |
+| [PERFORMANCE_OPTIMIZATION.md](PERFORMANCE_OPTIMIZATION.md) | ⭐⭐⭐ 性能优化指南（生产必读） |
+| [TESTING_GUIDE.md](TESTING_GUIDE.md) | ⭐⭐ 测试指南（开发必读） |
 | [DOCKER_DEPLOY.md](DOCKER_DEPLOY.md) | ⭐ Docker部署指南（推荐） |
 | [DEPLOYMENT.md](DEPLOYMENT.md) | 传统部署指南 |
 | [API_CONFIG.md](API_CONFIG.md) | API配置指南 |
