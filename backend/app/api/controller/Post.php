@@ -10,6 +10,7 @@ use app\common\model\Comment;
 use app\common\model\Like;
 use app\common\model\Follow;
 use app\common\model\User;
+use app\common\service\NotificationService;
 use think\facade\Db;
 
 class Post extends Base
@@ -193,7 +194,8 @@ class Post extends Base
             $post->like_count += 1;
             $post->save();
 
-            // TODO: 发送消息通知
+            // 发送消息通知
+            NotificationService::sendLikeNotification($this->userId, $post->user_id, $id);
 
             Db::commit();
 
@@ -279,7 +281,9 @@ class Post extends Base
             $post->comment_count += 1;
             $post->save();
 
-            // TODO: 发送消息通知
+            // 发送消息通知（优先通知被回复的用户，否则通知动态作者）
+            $notifyUserId = $toUserId > 0 ? $toUserId : $post->user_id;
+            NotificationService::sendCommentNotification($this->userId, $notifyUserId, $id, $comment->id, $content);
 
             Db::commit();
 

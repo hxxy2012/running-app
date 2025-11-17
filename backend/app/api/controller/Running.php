@@ -8,6 +8,8 @@ namespace app\api\controller;
 use app\common\model\RunningRecord;
 use app\common\model\TrackPoint;
 use app\common\model\User;
+use app\common\service\AchievementService;
+use app\common\service\ChallengeService;
 use think\facade\Db;
 
 class Running extends Base
@@ -147,13 +149,18 @@ class Running extends Base
             $user->total_count += 1;
             $user->save();
 
-            // TODO: 检查成就解锁
-            // TODO: 检查挑战进度
+            // 检查成就解锁
+            $newAchievements = AchievementService::checkAndUnlock($this->userId, $record);
+
+            // 检查挑战进度
+            $updatedChallenges = ChallengeService::updateProgress($this->userId, $record);
 
             Db::commit();
 
             return $this->success([
                 'record' => $record->toArray(),
+                'new_achievements' => $newAchievements,
+                'updated_challenges' => $updatedChallenges,
             ], '跑步完成');
 
         } catch (\Exception $e) {

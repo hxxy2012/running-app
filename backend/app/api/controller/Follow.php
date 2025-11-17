@@ -7,6 +7,7 @@ namespace app\api\controller;
 
 use app\common\model\Follow as FollowModel;
 use app\common\model\User;
+use app\common\service\NotificationService;
 use think\facade\Db;
 
 class Follow extends Base
@@ -40,7 +41,8 @@ class Follow extends Base
                 'follow_user_id' => $followUserId,
             ]);
 
-            // TODO: 发送消息通知
+            // 发送消息通知
+            NotificationService::sendFollowNotification($this->userId, $followUserId);
 
             return $this->success([], '关注成功');
 
